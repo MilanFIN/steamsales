@@ -1,8 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { useSelector, useDispatch, TypedUseSelectorHook } from "react-redux";
+
+
+
 import GameListItem from "./Components/GameListItem"
 import MaxPriceFilter from "./Components/MaxPriceFilter"
+import DiscountFilter from "./Components/DiscountFilter"
+
+import { selectMaxPrice } from './store/maxPriceSlice';
+import { selectDiscount } from './store/discountSlice';
+
+import { RootState } from './store/store';
 
 
 const APIKEY = process.env.REACT_APP_API_KEY || "0"
@@ -18,10 +28,16 @@ interface GameRankObj {
   peakPlayers: number;
 }
 
+const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
+
 function App() {
 
   const [gameRankObjs, setGameRankObjs] = useState<GameRankObj[]>([]);
-  const [maxPrice, setMaxPrice] = useState<number>(0);
+  //const [maxPrice, setMaxPrice] = useState<number>(0);
+
+  const maxPriceState = useTypedSelector(selectMaxPrice);
+  const discountState = useTypedSelector(selectDiscount);
+
 
   useEffect(()=>{
     // do stuff here...
@@ -57,18 +73,20 @@ function App() {
   }, []);
 
   const maxPriceUpdated = (value:number) =>  {
-    setMaxPrice(value)
+    //setMaxPrice(value)
   }
 
 
   return (
     <div className="App">
-
+      Under (euros)
       <MaxPriceFilter updateMaxPrice={maxPriceUpdated} />
+      Discount over (%)
+      <DiscountFilter/>
         <ul>
         {gameRankObjs.map((item) => (
           <li>
-           <GameListItem key={item.id} id={item.id} rank={item.rank} currentPlayers={item.currentPlayers} peakPlayers={item.peakPlayers} maxPrice={maxPrice} />
+           <GameListItem key={item.id} id={item.id} rank={item.rank} currentPlayers={item.currentPlayers} peakPlayers={item.peakPlayers} maxPrice={maxPriceState.maxPrice} minDiscount={discountState.discount}/>
           </li>
           ))}
         </ul>

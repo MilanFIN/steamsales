@@ -1,8 +1,10 @@
 
 
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from "react-redux";
+import { updateMaxPrice } from '../store/maxPriceSlice';
 
-const STOREURL = "http://asdf.dy.fi:3001/store/"
+
 
 
 interface MaxPriceFilterProps {
@@ -11,6 +13,8 @@ interface MaxPriceFilterProps {
 }
 
 function MaxPriceFilter(props: MaxPriceFilterProps){
+  const dispatch = useDispatch();
+
 
   const [maxPrice, setMaxPrice] = useState<number>(0);
 
@@ -18,6 +22,12 @@ function MaxPriceFilter(props: MaxPriceFilterProps){
   const onChangeMaxPrice = (event:React.ChangeEvent<HTMLInputElement>) => {
     setMaxPrice(parseInt(event.target.value));
     props.updateMaxPrice(parseInt(event.target.value))
+
+    dispatch(
+      updateMaxPrice(parseInt(event.target.value))
+    );
+
+
   }
 
 

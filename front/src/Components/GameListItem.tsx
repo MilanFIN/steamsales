@@ -11,7 +11,9 @@ interface GameListItemProps {
   rank: number;
   currentPlayers: number;
   peakPlayers: number;
-  maxPrice: number
+  maxPrice: number;
+  minDiscount: number
+
 }
 
 function GameListItem(props: GameListItemProps){
@@ -20,7 +22,7 @@ function GameListItem(props: GameListItemProps){
   const [free, setFree] = useState(false);
   const [price, setPrice] = useState<string>("");
   const [priceCents, setPriceCents] = useState<number>(0);
-  const [discount, setDiscount] = useState<string>("");
+  const [discount, setDiscount] = useState<number>(0);
   const [platforms, setPlatforms] = useState<Array<string>>([]);
   const [visible, setVisible] = useState(true);
 
@@ -44,7 +46,7 @@ function GameListItem(props: GameListItemProps){
         if (!gameObj.is_free) {
           setPrice(gameObj.price_overview.final_formatted)
           setPriceCents(gameObj.price_overview.final)
-          setDiscount(gameObj.price_overview.discount_percent)
+          setDiscount(parseInt(gameObj.price_overview.discount_percent))
 
         }
         else {
@@ -65,16 +67,15 @@ function GameListItem(props: GameListItemProps){
 
 
   useEffect(() => {
-    // This will run whenever `myProp` value changes
-    console.log('myProp value changed:', props.maxPrice);
-    if (priceCents <= props.maxPrice || props.maxPrice === 0) {
+    if ((priceCents <= props.maxPrice*100 || props.maxPrice === 0)
+      &&  (discount >= props.minDiscount || props.minDiscount === 0)) {
       setVisible(true)
     }
     else {
       setVisible(false)
     }
-    
-  }, [props.maxPrice]);
+  }, [props.maxPrice, props.minDiscount]);
+
 
 
   return (
@@ -91,7 +92,7 @@ function GameListItem(props: GameListItemProps){
           {props.currentPlayers}
           <br/>
           Price: {price}
-          {discount != "" ?
+          {discount != 0 ?
           <span>, Discount: {discount} %</span>
           :
           null
