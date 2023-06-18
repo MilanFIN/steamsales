@@ -33,7 +33,7 @@ function MaxPriceFilter(props: DiscountFilterProps){
   return (
     <div>
     <input type="range" min={0.0} max={100.0}  className="w-full h-8 " id="maxPriceRange" step={1}
-    onChange={onChangeDiscount} value={discount}></input>
+    onChange={onChangeDiscount} value={discount}></input> {discount} %
 
     </div>
 

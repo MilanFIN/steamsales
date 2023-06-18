@@ -1,6 +1,9 @@
 
 
 import React, { useEffect, useState } from 'react';
+import gameInfoSlice, { updateGameInfo, gameInfoState } from '../store/gameInfoSlice';
+import { useDispatch } from "react-redux";
+
 
 //const STOREURL = "http://localhost:3001/store/"
 const STOREURL = process.env.REACT_APP_API_URL + "/store/"
@@ -12,7 +15,8 @@ interface GameListItemProps {
   currentPlayers: number;
   peakPlayers: number;
   maxPrice: number;
-  minDiscount: number
+  minDiscount: number;
+  visible: boolean;
 
 }
 
@@ -26,6 +30,7 @@ function GameListItem(props: GameListItemProps){
   const [platforms, setPlatforms] = useState<Array<string>>([]);
   const [visible, setVisible] = useState(true);
 
+  const dispatch = useDispatch();
 
   useEffect(()=>{
 
@@ -43,16 +48,30 @@ function GameListItem(props: GameListItemProps){
         const gamePlatforms = Object.keys(gameObj.platforms).filter(key => gameObj.platforms[key] === true);
         setPlatforms(gamePlatforms)
 
+        var parsedGameData = {
+          price:0,
+          discount:0,
+          rank:props.rank
+        } as gameInfoState;
+
+
+
         if (!gameObj.is_free) {
           setPrice(gameObj.price_overview.final_formatted)
           setPriceCents(gameObj.price_overview.final)
+          parsedGameData.price = gameObj.price_overview.final;
           setDiscount(parseInt(gameObj.price_overview.discount_percent))
-
+          parsedGameData.discount = gameObj.price_overview.discount_percent;
         }
         else {
           setFree(true)
           setPrice("Free")
         }
+
+
+        dispatch(
+          updateGameInfo(parsedGameData)
+        );
 
       } catch (error) {
         //console.log(STOREURL + "api/appdetails?appids="+props.id)
@@ -80,7 +99,7 @@ function GameListItem(props: GameListItemProps){
 
   return (
     <div>     
-      {visible? 
+      {props.visible? 
           <div>
           
           <img src={"https://cdn.cloudflare.steamstatic.com/steam/apps/"+props.id+"/capsule_231x87.jpg"} alt={"game: "+props.id+" thumbnail"} />
@@ -92,11 +111,8 @@ function GameListItem(props: GameListItemProps){
           {props.currentPlayers}
           <br/>
           Price: {price}
-          {discount != 0 ?
           <span>, Discount: {discount} %</span>
-          :
-          null
-          }
+          
             {platforms.length > 0 && (
               <span>Platforms: {platforms.join(', ')}</span>
             )}
