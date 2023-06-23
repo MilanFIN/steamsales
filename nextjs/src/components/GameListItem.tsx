@@ -5,8 +5,8 @@ import gameInfoSlice, { updateGameInfo, gameInfoState } from '../store/gameInfoS
 import { useDispatch } from "react-redux";
 
 
-//const STOREURL = "http://localhost:3001/store/"
-const STOREURL = process.env.REACT_APP_API_URL + "/store/"
+const STOREURL = "http://localhost:3001/store/"
+//const STOREURL = process.env.REACT_APP_API_URL + "/store/"
 
 
 interface GameListItemProps {
@@ -45,7 +45,15 @@ function GameListItem(props: GameListItemProps){
 
         setName(gameObj.name)
 
-        const gamePlatforms = Object.keys(gameObj.platforms).filter(key => gameObj.platforms[key] === true);
+        const rawPlatforms = Object.keys(gameObj.platforms).filter(key => gameObj.platforms[key] === true);
+        var gamePlatforms = Array<string>();
+        rawPlatforms.forEach(platform => {
+          if (platform === "windows") {
+            platform = "win"
+          }
+          gamePlatforms.push(platform)
+        });
+
         setPlatforms(gamePlatforms)
 
         var parsedGameData = {
@@ -113,9 +121,11 @@ function GameListItem(props: GameListItemProps){
           Price: {price}
           <span>, Discount: {discount} %</span>
           
-            {platforms.length > 0 && (
-              <span>Platforms: {platforms.join(', ')}</span>
-            )}
+
+            {platforms.map(platform => (
+                <img src={`https://store.cloudflare.steamstatic.com/public/images/v6/icon_platform_${platform}_dark.png`} alt={"icon for platform: "+platform}/>
+              ))
+            }
             <br/>
             Max price: {props.maxPrice}
             </div>
@@ -126,5 +136,10 @@ function GameListItem(props: GameListItemProps){
 
   )
 }
-
+/*
+          
+{platforms.length > 0 && (
+              <span>Platforms: {platforms.join(', ')}</span>
+            )}
+*/
 export default GameListItem;
