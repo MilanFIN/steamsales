@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 
 
 const STOREURL = "http://localhost:3001/store/"
-//const STOREURL = process.env.REACT_APP_API_URL + "/store/"
+
 
 
 interface GameListItemProps {
