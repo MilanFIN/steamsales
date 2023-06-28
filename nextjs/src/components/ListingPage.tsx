@@ -9,11 +9,15 @@ import { Provider } from 'react-redux';
 
 import { selectMaxPrice } from '../store/maxPriceSlice';
 import { selectDiscount } from '../store/discountSlice';
+import { selectIncludeFree } from '../store/includeFreeSlice';
 
 import { RootState } from '../store/store';
 import { selectGameInfo } from '../store/gameInfoSlice';
 import MaxPriceFilter from '@/components/MaxPriceFilter';
 import DiscountFilter from '@/components/DiscountFilter';
+import IncludeFreeCheckBox from '@/components/IncludeFreeCheckBox';
+
+//import IncludeFreeCheckBox from '@components/IncludeFreeCheckBox'
 import GameListItem from '@/components/GameListItem';
 
 
@@ -22,6 +26,7 @@ const APIURL = "/api/steamapi/"
 
 interface GameRankObj {
   id: number;
+  viewRank:number
   rank: number;
   currentPlayers: number;
   peakPlayers: number;
@@ -30,16 +35,24 @@ interface GameRankObj {
   visible: boolean;
 }
 
+interface GamePriceObj {
+  rank: number;
+  price: number;
+  discount: number;
+}
 
 export default function ListingPage() {
 
   const [gameRankObjs, setGameRankObjs] = useState<GameRankObj[]>([]);
+
+  const [gamePrices, setGamePrices] = useState<GamePriceObj[]>(new Array(10).fill({rank:0, price:0, discount:0}));
 
   const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
 
   const maxPriceState = useTypedSelector(selectMaxPrice);
   const discountState = useTypedSelector(selectDiscount);
   const gameInfoState = useTypedSelector(selectGameInfo);
+  const includeFreeState = useTypedSelector(selectIncludeFree);
 
 
   useEffect(()=>{
@@ -55,7 +68,7 @@ export default function ListingPage() {
 
         const rankObjs = Array<GameRankObj>()
 
-        games.forEach((game:any) => {
+        games.slice(0, 10).forEach((game:any) => {
           const newGame: GameRankObj = {
             id: game.appid,
             rank:game.rank,
@@ -83,47 +96,57 @@ export default function ListingPage() {
 
 
   useEffect(() => {
-    if (gameInfoState.discount != 0) {
-      if (gameInfoState.rank-1 < gameRankObjs.length) {
-        console.log(gameInfoState.price)
-        gameRankObjs.at(gameInfoState.rank-1)!.price = gameInfoState.price
-        gameRankObjs.at(gameInfoState.rank-1)!.discount = gameInfoState.discount
-        setGameRankObjs(gameRankObjs)
+    
+
+      if (gameInfoState.rank > 0 && gameInfoState.rank-1 < gamePrices.length) {
+        let updatedGamePrices = gamePrices.map(l => Object.assign({}, l));
+        updatedGamePrices[gameInfoState.rank-1].price = gameInfoState.price
+        updatedGamePrices[gameInfoState.rank-1].discount = gameInfoState.discount
+        setGamePrices(updatedGamePrices)
+        
     
       }
-      }
+      
+  
+      
+      
   }, [gameInfoState]);
 
   useEffect(() => {
-    setVisibilities(maxPriceState.maxPrice, discountState.discount)
+    setVisibilities(maxPriceState.maxPrice, discountState.discount, includeFreeState.include)
 
     
-  }, [maxPriceState, discountState]);
+  }, [maxPriceState.maxPrice, discountState.discount, includeFreeState.include]);
 
 
-  const setVisibilities = (maxPrice:number, discount:number) => {
-    var rankedObjs = gameRankObjs;
+  const setVisibilities = (maxPrice:number, discount:number, includeFree:boolean) => {
+    var rankedObjs = new Array<GameRankObj>();
     var rank = 1;
-    rankedObjs.forEach((obj, ind) => {
-      /*
-      if ((obj.price <= maxPriceState.maxPrice*100 || maxPriceState.maxPrice === 0)
-             &&  (obj.discount >= discountState.discount || discountState.discount === 0)) {        
-      */
-      if ((obj.discount >= discount-1 || discount === 0) &&
-        (obj.price <= maxPrice * 100 || maxPrice === 0)) {
+    console.log(gamePrices)
+    gameRankObjs.forEach((obj, ind) => {
+
+      let price = gamePrices[ind].price;
+      let discount = gamePrices[ind].discount;
+
+      //if ((obj.discount >= discount-1 || discount === 0) &&
+      //  (obj.price <= maxPrice * 100 || maxPrice === 0) 
+      if ((includeFree || price === 0)) {//) { //(!includeFree && obj.price === 0) || 
         obj.visible = true;
-        obj.rank = rank;
+        obj.viewRank = rank;
         rank++;
+
       }
       else {
         obj.visible = false;
       }
-      rankedObjs[ind] = obj;
-      //console.log(obj.price, obj.visible, maxPriceState.maxPrice)
+      rankedObjs.push(obj);
 
     })
-    setGameRankObjs(rankedObjs)
-    //return rankedObjs
+
+    if (rankedObjs.length != 0) {
+      setGameRankObjs(rankedObjs)
+    }
+    
   }
 
 
@@ -134,11 +157,13 @@ export default function ListingPage() {
         <MaxPriceFilter />
         Discount over (%)
         <DiscountFilter/>
+        Include free games
+        <IncludeFreeCheckBox/>
         <ul>
         {gameRankObjs.map((item) => (
           
           <div>
-           <GameListItem key={item.id} id={item.id} rank={item.rank} currentPlayers={item.currentPlayers} 
+           <GameListItem key={item.id} id={item.id} rank={item.rank} viewRank={item.viewRank} currentPlayers={item.currentPlayers} 
                         peakPlayers={item.peakPlayers} maxPrice={maxPriceState.maxPrice} minDiscount={discountState.discount}
                         visible={item.visible}/>
 

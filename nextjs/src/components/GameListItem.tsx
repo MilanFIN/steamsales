@@ -5,13 +5,15 @@ import gameInfoSlice, { updateGameInfo, gameInfoState } from '../store/gameInfoS
 import { useDispatch } from "react-redux";
 
 
-const STOREURL = "http://localhost:3001/store/"
+//const STOREURL = "http://localhost:3001/store/"
+const STOREURL = "/api/steamstore/"
 
 
 
 interface GameListItemProps {
   id: number;
   rank: number;
+  viewRank: number;
   currentPlayers: number;
   peakPlayers: number;
   maxPrice: number;
@@ -37,7 +39,7 @@ function GameListItem(props: GameListItemProps){
     
     const fetchData = async () => {
       try {
-        const response = await fetch(STOREURL + "api/appdetails?appids="+props.id);
+        const response = await fetch(STOREURL + "?path=api/appdetails?appids="+props.id);
         const jsonData = await response.json();
 
         var [gameObj]:any  = Object.values(jsonData);
@@ -113,7 +115,7 @@ function GameListItem(props: GameListItemProps){
           <img src={"https://cdn.cloudflare.steamstatic.com/steam/apps/"+props.id+"/capsule_231x87.jpg"} alt={"game: "+props.id+" thumbnail"} />
           <br/>
           
-          {props.rank}: {name}
+          {props.viewRank}, {props.rank}: {name}
           <br/>
           Current: 
           {props.currentPlayers}
@@ -123,7 +125,7 @@ function GameListItem(props: GameListItemProps){
           
 
             {platforms.map(platform => (
-                <img src={`https://store.cloudflare.steamstatic.com/public/images/v6/icon_platform_${platform}_dark.png`} alt={"icon for platform: "+platform}/>
+                <img key={platform+props.id} src={`https://store.cloudflare.steamstatic.com/public/images/v6/icon_platform_${platform}_dark.png`} alt={"icon for platform: "+platform}/>
               ))
             }
             <br/>

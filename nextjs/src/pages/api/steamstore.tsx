@@ -10,6 +10,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 	if ("path" in req.query) {
 
 		var path = req.query.path;
+		console.log(STOREURL + path)
 		const response = await fetch(STOREURL + path, {
 			next: { revalidate: 3600 },
 			})
