@@ -23,7 +23,7 @@ import GameListItem from '@/components/GameListItem';
 
 //const APIURL = "http://localhost:3001/api/"
 const APIURL = "/api/steamapi/"
-const STOREURL = "/api/steamstore/"
+const STOREURL = "/api/steamapi/"//"/api/steamstore/"
 
 
 
@@ -60,11 +60,11 @@ export default function ListingPage() {
     
     const fetchData = async () => {
       try {
-        const response = await fetch(APIURL+"?path=ISteamChartsService/GetGamesByConcurrentPlayers/v1");
+        const response = await fetch(APIURL+"?subdomain=api&path=ISteamChartsService/GetGamesByConcurrentPlayers/v1");
         const jsonData = await response.json();
 
         //TODO: temporary restriction to prevent flooding spamming servers accidentally
-        const gameList = jsonData.response.ranks.slice(0, 10)
+        const gameList = jsonData.response.ranks.slice(0, 6)
 
         gameList.forEach(async (game:any) => { //
 
@@ -84,7 +84,7 @@ export default function ListingPage() {
 
 
           try {
-            const gameSpecResponse = await fetch(STOREURL + "?path=api/appdetails?appids="+game.appid);
+            const gameSpecResponse = await fetch(STOREURL + "?subdomain=store&path=api/appdetails?appids="+game.appid);
             const gameJson = await gameSpecResponse.json();
     
             var [gameObj]:any  = Object.values(gameJson);
