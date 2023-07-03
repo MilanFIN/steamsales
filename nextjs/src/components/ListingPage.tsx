@@ -13,12 +13,13 @@ import { selectIncludeFree } from '../store/includeFreeSlice';
 
 import { RootState } from '../store/store';
 import { selectGameInfo } from '../store/gameInfoSlice';
-import MaxPriceFilter from '@/components/MaxPriceFilter';
+import PriceFilter from '@/components/PriceFilter';
 import DiscountFilter from '@/components/DiscountFilter';
 import IncludeFreeCheckBox from '@/components/IncludeFreeCheckBox';
 
 //import IncludeFreeCheckBox from '@components/IncludeFreeCheckBox'
 import GameListItem from '@/components/GameListItem';
+import DualSlider from './DualSlider';
 
 
 //const APIURL = "http://localhost:3001/api/"
@@ -64,7 +65,7 @@ export default function ListingPage() {
         const jsonData = await response.json();
 
         //TODO: temporary restriction to prevent flooding spamming servers accidentally
-        const gameList = jsonData.response.ranks.slice(0, 6)
+        const gameList = jsonData.response.ranks.slice(0, 50)
 
         gameList.forEach(async (game:any) => { //
 
@@ -165,12 +166,17 @@ export default function ListingPage() {
     
   }
 
+const onchange = (min:number, max:number) => {
+  console.log(min, max)
+}
+
 
   return (
 
 	<div>
+
         Under (euros)
-        <MaxPriceFilter />
+        <PriceFilter />
         Discount over (%)
         <DiscountFilter/>
         Include free games
