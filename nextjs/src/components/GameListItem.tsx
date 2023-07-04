@@ -15,8 +15,6 @@ interface GameListItemProps {
   viewRank: number;
   currentPlayers: number;
   peakPlayers: number;
-  maxPrice: number;
-  minDiscount: number;
   visible: boolean;
   name: string;
   price:string;
@@ -46,7 +44,7 @@ function GameListItem(props: GameListItemProps){
           <img src={"https://cdn.cloudflare.steamstatic.com/steam/apps/"+props.id+"/capsule_231x87.jpg"} alt={"game: "+props.id+" thumbnail"} />
           <br/>
           
-          {props.viewRank}, {props.rank}: {props.name}
+          {props.viewRank}: {props.name}
           <br/>
           Current: 
           {props.currentPlayers}
@@ -60,7 +58,6 @@ function GameListItem(props: GameListItemProps){
               ))
             }
             <br/>
-            Max price: {props.maxPrice}
             </div>
       : null
           }

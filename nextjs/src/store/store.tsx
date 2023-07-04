@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { createWrapper } from "next-redux-wrapper";
 
-import maxPriceReducer from "./maxPriceSlice";
+import maxPriceReducer from "./priceLimitSlice";
 import discountReducer from "./discountSlice";
 import gameInfoReducer from "./gameInfoSlice";
 import includeFreeReducer from "./includeFreeSlice";
@@ -9,7 +9,7 @@ import includeFreeReducer from "./includeFreeSlice";
 // use 'configreStrore'  function to create the store
 export const store = configureStore({
     reducer: {
-      maxPrice: maxPriceReducer,
+      priceLimits: maxPriceReducer,
       discount: discountReducer,
       gameInfo: gameInfoReducer,
       includeFree: includeFreeReducer,

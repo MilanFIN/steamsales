@@ -2,7 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from "react-redux";
-import { updateDiscount } from '../store/discountSlice';
+import { updateDiscountLimits } from '../store/discountSlice';
+import DualSlider from './DualSlider';
 
 
 
@@ -11,19 +12,14 @@ interface DiscountFilterProps {
 
 }
 
-function MaxPriceFilter(props: DiscountFilterProps){
+function DiscountFilter(props: DiscountFilterProps){
   const dispatch = useDispatch();
 
 
-  const [discount, setDiscount] = useState<number>(0);
-
-
-  const onChangeDiscount = (event:React.ChangeEvent<HTMLInputElement>) => {
-    setDiscount(parseInt(event.target.value));
-    //props.updateMaxPrice(parseInt(event.target.value))
+  const discountChange = (min:number, max:number) => {
 
     dispatch(
-      updateDiscount(parseInt(event.target.value))
+      updateDiscountLimits({maxDiscount: max, minDiscount: min})
     );
 
 
@@ -32,12 +28,12 @@ function MaxPriceFilter(props: DiscountFilterProps){
 
   return (
     <div>
-    <input type="range" min={0.0} max={100.0}  className="w-full h-8 " id="maxPriceRange" step={1}
-    onChange={onChangeDiscount} value={discount}></input> {discount} %
+    
+      <DualSlider min={0} max={100} onChange={discountChange}/>
 
     </div>
 
   )
 }
 
-export default MaxPriceFilter;
+export default DiscountFilter;

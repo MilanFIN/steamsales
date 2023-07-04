@@ -7,7 +7,7 @@ import { useSelector, useDispatch, TypedUseSelectorHook } from "react-redux";
 import {store} from '../store/store'
 import { Provider } from 'react-redux';
 
-import { selectMaxPrice } from '../store/maxPriceSlice';
+import { selectPriceLimits } from '../store/priceLimitSlice';
 import { selectDiscount } from '../store/discountSlice';
 import { selectIncludeFree } from '../store/includeFreeSlice';
 
@@ -49,7 +49,7 @@ export default function ListingPage() {
 
   const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
 
-  const maxPriceState = useTypedSelector(selectMaxPrice);
+  const priceLimitState = useTypedSelector(selectPriceLimits);
   const discountState = useTypedSelector(selectDiscount);
   const gameInfoState = useTypedSelector(selectGameInfo);
   const includeFreeState = useTypedSelector(selectIncludeFree);
@@ -134,20 +134,23 @@ export default function ListingPage() {
 
 
   useEffect(() => {
-    setVisibilities(maxPriceState.maxPrice, discountState.discount, includeFreeState.include)    
-  }, [maxPriceState.maxPrice, discountState.discount, includeFreeState.include]);
+    setVisibilities(priceLimitState.minPrice, priceLimitState.maxPrice, discountState.minDiscount, discountState.maxDiscount, includeFreeState.include)    
+  }, [priceLimitState.maxPrice, priceLimitState.minPrice, discountState.minDiscount, discountState.maxDiscount, includeFreeState.include]);
 
 
-  const setVisibilities = (maxPrice:number, discount:number, includeFree:boolean) => {
+  const setVisibilities = (minPrice:number, maxPrice:number, minDiscount:number, maxDiscount:number, includeFree:boolean) => {
+    console.log(minPrice)
     var rankedObjs = new Array<Game>();
     var rank = 1;
     //console.log(gamePrices)
     games.forEach((obj, ind) => {
 
 
-      if ((obj.discount >= discount-1 || discount === 0) &&
-        (obj.priceCents <= maxPrice * 100 || maxPrice === 0) 
-      && ((includeFree || obj.priceCents !== 0))) {//) { //(!includeFree && obj.price === 0) || 
+      if ((obj.discount >= minDiscount-1 || minDiscount === 0)
+         && ((obj.discount <= maxDiscount +1 || maxDiscount === 0))
+         && (obj.priceCents <= maxPrice * 100 || maxPrice === 0)
+         && (obj.priceCents >= minPrice * 100 || minPrice === 0)
+         && ((includeFree || obj.priceCents !== 0))) {
         obj.visible = true;
         obj.viewRank = rank;
         rank++;
@@ -175,9 +178,9 @@ const onchange = (min:number, max:number) => {
 
 	<div>
 
-        Under (euros)
+        Price Between
         <PriceFilter />
-        Discount over (%)
+        Discount between (%)
         <DiscountFilter/>
         Include free games
         <IncludeFreeCheckBox/>
@@ -186,7 +189,7 @@ const onchange = (min:number, max:number) => {
           
           <div>
            <GameListItem key={item.id} id={item.id} rank={item.rank} viewRank={item.viewRank} currentPlayers={item.currentPlayers}
-            peakPlayers={item.peakPlayers} maxPrice={maxPriceState.maxPrice} minDiscount={discountState.discount}
+            peakPlayers={item.peakPlayers} 
             visible={item.visible} name={item.name} price={item.priceFormatted.toString()} discount={item.discount}
             platforms={item.platforms}/>
 

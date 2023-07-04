@@ -5,16 +5,18 @@ import { RootState } from "./store";
 
 type priceState = {
 	maxPrice: number;
+	minPrice: number;
 };
 
 const initialState = {
 	maxPrice: 0,
+	minPrice: 100
 } as priceState;
   
 
-const maxPriceSlice = createSlice({
+const priceLimitSlice = createSlice({
 	// name used in action types
-	name: "maxPrice",
+	name: "priceLimits",
 	// initial state
 	initialState,
 	// an object of "case reducers"
@@ -22,20 +24,22 @@ const maxPriceSlice = createSlice({
 	reducers: {
 	  //  arguments of action are same first one is state
 	  //& second one is action
-	  updateMaxPrice(
+	  updatePriceLimits(
 		state, //type is infered from the initial state
 		// `PayloadAction` is a generic-type
 		// that allows you to specify an action
 		// with a typped payload.
-		action: PayloadAction<string, number>
+		action: PayloadAction<string, priceState>
 	  ) {
-		state.maxPrice = action.payload;
+		state.maxPrice = action.payload.maxPrice;
+		state.minPrice = action.payload.minPrice;
+
 	  },
 	},
   });
   
-export const { updateMaxPrice } = maxPriceSlice.actions;
-export default maxPriceSlice.reducer;
+export const { updatePriceLimits } = priceLimitSlice.actions;
+export default priceLimitSlice.reducer;
 
 // create and export the selector
-export const selectMaxPrice = (state: RootState) => state.maxPrice;
+export const selectPriceLimits = (state: RootState) => state.priceLimits;

@@ -4,11 +4,13 @@ import { RootState } from "./store";
 
 
 type discountState = {
-	discount: number;
+	minDiscount: number;
+	maxDiscount: number
 };
 
 const initialState = {
-	discount: 0,
+	minDiscount: 0,
+	maxDiscount: 100,
 } as discountState;
   
 
@@ -22,19 +24,21 @@ const discountSlice = createSlice({
 	reducers: {
 	  //  arguments of action are same first one is state
 	  //& second one is action
-	  updateDiscount(
+	  updateDiscountLimits(
 		state, //type is infered from the initial state
 		// `PayloadAction` is a generic-type
 		// that allows you to specify an action
 		// with a typped payload.
-		action: PayloadAction<string, number>
+		action: PayloadAction<string, discountState>
 	  ) {
-		state.discount = action.payload;
+		state.minDiscount = action.payload.minDiscount;
+		state.maxDiscount = action.payload.maxDiscount;
+
 	  },
 	},
   });
   
-export const { updateDiscount } = discountSlice.actions;
+export const { updateDiscountLimits } = discountSlice.actions;
 export default discountSlice.reducer;
 
 export const selectDiscount = (state: RootState) => state.discount;

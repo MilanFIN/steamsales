@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from "react-redux";
-import { updateMaxPrice } from '../store/maxPriceSlice';
+import { updatePriceLimits } from '../store/priceLimitSlice';
 
 import DualSlider from './DualSlider';
 
@@ -22,7 +22,7 @@ function PriceFilter(props: PriceFilterProps){
   const priceChange = (min:number, max:number) => {
 
     dispatch(
-      updateMaxPrice(max)
+      updatePriceLimits({maxPrice: max, minPrice: min})
     );
 
 
