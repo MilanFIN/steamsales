@@ -6,23 +6,33 @@ import cacheData from "memory-cache";
 //const APIURL = "http://api.steampowered.com/"
 const APIURL = ".steampowered.com/"
 
+
 export default async (req: NextApiRequest, res: NextApiResponse) => {
 
 	//var result = cache.get("req.query")
 
 	
-	if ("path" in req.query && "subdomain" in req.query) {
+	if ("path" in req.query && "subdomain" in req.query
+		&& "currency" in req.query && "lang" in req.query) {
 
 		var path = req.query.path;
+		var currency = req.query.currency;
+		var lang = req.query.lang;
+
 		var subdomain = req.query.subdomain;
 
 
-		const url = "https://"+subdomain+APIURL+path;
+		let url = "https://"+subdomain+APIURL+path;
+		if (subdomain === "store") {
+			url+="&currency="+currency+"&l="+lang;
+		}
+		console.log(url)
 
 		const value = cacheData.get(url);
 		if (value) {
 			
 			res.status(200).json(value);
+			console.log("found")
 		} else {
 			console.log("REQUEST")
 			const hours = 1;

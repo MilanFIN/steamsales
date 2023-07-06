@@ -39,7 +39,9 @@ interface Game {
   priceCents: number;
   discount: number;
   visible: boolean;
-  platforms: Array<string>
+  platforms: Array<string>;
+  description: string;
+  genres: Array<[number, string]>
 }
 
 export default function ListingPage() {
@@ -61,7 +63,7 @@ export default function ListingPage() {
     
     const fetchData = async () => {
       try {
-        const response = await fetch(APIURL+"?subdomain=api&path=ISteamChartsService/GetGamesByConcurrentPlayers/v1");
+        const response = await fetch(APIURL+"?subdomain=api&lang=english&currency=1&path=ISteamChartsService/GetGamesByConcurrentPlayers/v1/");
         const jsonData = await response.json();
 
         //TODO: temporary restriction to prevent flooding spamming servers accidentally
@@ -80,18 +82,29 @@ export default function ListingPage() {
             priceCents:0,
             discount:0,
             visible:true,
-            platforms:[]
+            platforms:[],
+            description: "",
+            genres:[],
           };
 
 
           try {
-            const gameSpecResponse = await fetch(STOREURL + "?subdomain=store&path=api/appdetails?appids="+game.appid);
+            const url = STOREURL + "?subdomain=store&lang=english&currency=1&path=api/appdetails?appids="+game.appid;
+            console.log(url)
+            const gameSpecResponse = await fetch(url);
             const gameJson = await gameSpecResponse.json();
     
             var [gameObj]:any  = Object.values(gameJson);
             gameObj = gameObj.data;
             newGame.name = gameObj.name
+            newGame.description = gameObj.short_description;
 
+             gameObj.genres .forEach((genreList: any) => {
+              let genre: [number, string];
+              genre = [parseInt(genreList.id), genreList.description];
+              console.log(typeof(genre))
+              newGame.genres.push(genre)
+            })
 
             const rawPlatforms = Object.keys(gameObj.platforms).filter(key => gameObj.platforms[key] === true);
             var gamePlatforms = Array<string>();
@@ -143,7 +156,7 @@ export default function ListingPage() {
     var rankedObjs = new Array<Game>();
     var rank = 1;
     //console.log(gamePrices)
-    games.forEach((obj, ind) => {
+    games.slice().sort((a, b) => b.currentPlayers - a.currentPlayers).forEach((obj, ind) => {
 
 
       if ((obj.discount >= minDiscount-1 || minDiscount === 0)
@@ -176,27 +189,40 @@ const onchange = (min:number, max:number) => {
 
   return (
 
-	<div>
+	<div className="">
 
-        Price Between
-        <PriceFilter />
-        Discount between (%)
-        <DiscountFilter/>
-        Include free games
-        <IncludeFreeCheckBox/>
-        <ul>
-        {games.sort((a, b) => a.viewRank - b.viewRank).map((item) => (
-          
-          <div>
-           <GameListItem key={item.id} id={item.id} rank={item.rank} viewRank={item.viewRank} currentPlayers={item.currentPlayers}
-            peakPlayers={item.peakPlayers} 
-            visible={item.visible} name={item.name} price={item.priceFormatted.toString()} discount={item.discount}
-            platforms={item.platforms}/>
+        <div className="text-xl flex justify-center w-full ">
+          <h1 className="justify-center">STEAM TOP 100 SALES</h1>
+        </div>
 
 
-          </div>
-          ))}
-        </ul>
+        <div className="flex  w-full justify-center ">
+
+
+            <div className="w-4/6 bg-gray-700">
+              <ul >
+              {games.sort((a, b) => a.viewRank - b.viewRank).map((item) => (
+                
+                <GameListItem key={item.id} id={item.id} rank={item.rank} viewRank={item.viewRank} currentPlayers={item.currentPlayers}
+                  peakPlayers={item.peakPlayers} 
+                  visible={item.visible} name={item.name} price={item.priceFormatted.toString()} discount={item.discount}
+                  platforms={item.platforms} description={item.description} genres={item.genres}/>
+
+
+                ))}
+              </ul>
+            </div>
+            <div className="top-24 right-32   w-1/6 bg-gradient-to-b from-gray-800 to-gray-800 text-white">
+              Price Between
+              <PriceFilter />
+              Discount between (%)
+              <DiscountFilter/>
+              Include free games
+              <IncludeFreeCheckBox/>
+
+
+            </div>
+        </div>
 
     </div>
   )

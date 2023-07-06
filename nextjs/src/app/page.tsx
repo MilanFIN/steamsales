@@ -11,8 +11,8 @@ export default function Home() {
 
   return (
 
-    <main className="bg-white">
-      <div className="bg-white">
+    <main className="bg-gradient-to-b from-gray-800 to-gray-900 min-h-screen">
+      <div className="">
 
         <ListingPage/>
 

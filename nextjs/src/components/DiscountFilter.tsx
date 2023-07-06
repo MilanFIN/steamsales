@@ -27,7 +27,7 @@ function DiscountFilter(props: DiscountFilterProps){
 
 
   return (
-    <div>
+    <div >
     
       <DualSlider min={0} max={100} onChange={discountChange}/>
 
