@@ -189,30 +189,22 @@ const onchange = (min:number, max:number) => {
 
   return (
 
-	<div className="">
+	<div className="w-full">
 
         <div className="text-xl flex justify-center w-full ">
           <h1 className="justify-center">STEAM TOP 100 SALES</h1>
         </div>
 
 
-        <div className="flex  w-full justify-center ">
+        <div className="md:flex justify-center flex-row-reverse flex-column">
 
-
-            <div className="w-4/6 bg-gray-700">
-              <ul >
-              {games.sort((a, b) => a.viewRank - b.viewRank).map((item) => (
-                
-                <GameListItem key={item.id} id={item.id} rank={item.rank} viewRank={item.viewRank} currentPlayers={item.currentPlayers}
-                  peakPlayers={item.peakPlayers} 
-                  visible={item.visible} name={item.name} price={item.priceFormatted.toString()} discount={item.discount}
-                  platforms={item.platforms} description={item.description} genres={item.genres}/>
-
-
-                ))}
-              </ul>
-            </div>
-            <div className="top-24 right-32   w-1/6 bg-gradient-to-b from-gray-800 to-gray-800 text-white">
+        <div className={`top-24 right-32   
+                        
+                        w-[300px] 
+                        
+                        bg-gradient-to-b 
+                        from-gray-800 to-gray-800 
+                        text-white`}>
               Price Between
               <PriceFilter />
               Discount between (%)
@@ -221,6 +213,20 @@ const onchange = (min:number, max:number) => {
               <IncludeFreeCheckBox/>
 
 
+            </div>
+
+            <div className={`md:w-4/6
+                             w-full
+                             bg-gray-700`}>
+              <ul >
+              {games.sort((a, b) => a.viewRank - b.viewRank).map((item) => (
+                
+                <GameListItem key={item.id} id={item.id} rank={item.rank} viewRank={item.viewRank} currentPlayers={item.currentPlayers}
+                  peakPlayers={item.peakPlayers} 
+                  visible={item.visible} name={item.name} price={item.priceFormatted.toString()} discount={item.discount}
+                  platforms={item.platforms} description={item.description} genres={item.genres}/>
+                ))}
+              </ul>
             </div>
         </div>
 
