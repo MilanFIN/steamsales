@@ -32,6 +32,42 @@ function DualSlider(props: DualSliderProps){
     [props.min, props.max]
   );
 
+  const updateMinVal = (event:any) => {
+    if (event.target.value.length == 0) {
+      setMinVal(props.min);
+      return;
+    }
+    const value = parseInt(event.target.value);
+    
+    if (value < props.min) {
+      setMinVal(props.min);
+    }
+    else if (value > maxVal) {
+      setMinVal(maxVal);
+    }
+    else {
+      setMinVal(value);
+    }
+  }
+
+  const updateMaxVal = (event:any) => {
+    if (event.target.value.length == 0) {
+      setMaxVal(props.max);
+      return;
+    }
+    const value = parseInt(event.target.value);
+    
+    if (value > props.max) {
+      setMaxVal(props.max);
+    }
+    else if (value < minVal) {
+      setMaxVal(minVal);
+    }
+    else {
+      setMaxVal(value);
+    }
+  }
+
   // Set width of the range to decrease from the left side
   useEffect(() => {
     if (maxValRef.current) {
@@ -66,7 +102,8 @@ function DualSlider(props: DualSliderProps){
 
 
   return (
-    <div className="container">
+  
+    <div className="h-[62px] pt-[10px] ml-6">
       <input
         type="range"
         min={props.min}
@@ -98,20 +135,34 @@ function DualSlider(props: DualSliderProps){
         className={`thumb thumb--zindex-3 ${lastSelected == "max" ? "thumb--zindex-5":null} `}
       />
 
-      <div className="slider">
-        <div className="slider__track"
+
+
+
+      <div className="relative w-[300px]">
+        <div className={ `absolute w-[300px] mt-[-3px] 
+                          h-[5px]
+                          bg-gray-100
+                          `}
                 onClick={() => {
-                  //here figure out which one to move, if < minvalue, change minvalue, otherwise maxvalue
-                }}
-        ></div>
-        <div ref={range} className="slider__range"
-                onClick={() => {
-                  //here figure out which one to move, check if minvalue or maxvalue is closer to current point?
                 }}
         ></div>
 
-        <div className="slider__left-value">{minVal}</div>
-        <div className="slider__right-value">{maxVal}</div>
+        <div ref={range} className={`absolute h-[5px] w-[300px] bg-gray-600 z-10 mt-[-3px] rounded`}
+                onClick={() => {
+                }}
+        ></div>
+
+        <input className={`text-white text-center bg-gray-500 
+                           text-sm mt-[20px] w-[48px] h-[32px] left-[-16px]
+                           absolute rounded`} 
+                value={minVal} onChange={updateMinVal}/>
+        <input className={`text-white text-center bg-gray-500 
+                           text-sm mt-[20px] w-[48px] h-[32px] right-[-16px] 
+                           absolute rounded`} 
+                value={maxVal} onChange={updateMaxVal}/>
+
+
+
       </div>
     </div>
 

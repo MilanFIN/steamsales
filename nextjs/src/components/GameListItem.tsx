@@ -39,7 +39,7 @@ function GameListItem(props: GameListItemProps){
 
 
   return (
-    <div className="bg-gray-600 m-2 text-white text-lg overflow-x-scroll overflow-y-hidden">     
+    <div className="bg-gray-600 m-2 text-white text-lg overflow-y-hidden rounded pt-2 pb-2">     
       {props.visible? 
           
           
@@ -48,7 +48,7 @@ function GameListItem(props: GameListItemProps){
 
           <div className="md:flex md:flex-row">
 
-            <a className="flex-shrink-0" href={"https://store.steampowered.com/app/"+props.id}>
+            <a className="flex-shrink-0 mt-2" href={"https://store.steampowered.com/app/"+props.id}>
               <img className="w-[72] h-auto"
                 src={"https://cdn.cloudflare.steamstatic.com/steam/apps/"+props.id+"/capsule_231x87.jpg"} alt={"game: "+props.name+" thumbnail"} />
             </a>
@@ -73,9 +73,11 @@ function GameListItem(props: GameListItemProps){
 
                 </div>
 
-              <div className="flex">
+              <div className="flex overflow-x-scroll">
                   {props.platforms.map(platform => (
-                      <img className="w-8 h-8" key={platform+props.id} src={`https://store.cloudflare.steamstatic.com/public/images/v6/icon_platform_${platform}_dark.png`} alt={"icon for platform: "+platform}/>
+                    //https://store.cloudflare.steamstatic.com/public/images/v6/icon_platform_win.png?v=3
+                    //`https://store.cloudflare.steamstatic.com/public/images/v6/icon_platform_${platform}_dark.png`}
+                      <img className="w-8 h-8" key={platform+props.id} src={`https://store.cloudflare.steamstatic.com/public/images/v6/icon_platform_${platform}.png?v=3`} alt={"icon for platform: "+platform}/>
                     ))
                   }
                   {props.genres.slice(0,5).map(genre => (

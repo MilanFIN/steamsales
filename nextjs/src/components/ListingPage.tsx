@@ -120,16 +120,18 @@ export default function ListingPage() {
     
 
             if (!gameObj.is_free) {
+
+              if (gameObj.price_overview == null) {
+                console.log(gameObj)
+              }
+
               newGame.priceFormatted = gameObj.price_overview.final_formatted
               newGame.priceCents =gameObj.price_overview.final
               newGame.discount = gameObj.price_overview.discount_percent;
             }
           }
           catch (err) { }
-
-
-          setGames(games => [...games,newGame])
-
+            setGames(games => [...games,newGame])
   
         })
 
@@ -199,12 +201,20 @@ const onchange = (min:number, max:number) => {
         <div className="md:flex justify-center flex-row-reverse flex-column">
 
         <div className={`top-24 right-32   
+                        w-[350px]
+                        ml-auto mr-auto
+                        md:ml-0
+                        md:mr-0
+
                         
-                        w-[300px] 
-                        
-                        bg-gradient-to-b 
+                        md:w-[350px]
+                        bg-gray-400                 
+                        text-white
+                        bg-gradient-to-b                      
                         from-gray-800 to-gray-800 
-                        text-white`}>
+                          `} 
+
+                        >
               Price Between
               <PriceFilter />
               Discount between (%)
