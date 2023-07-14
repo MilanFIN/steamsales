@@ -40,7 +40,6 @@ function GameListItem(props: GameListItemProps){
 
   return (
     <div className="bg-gray-600 m-2 text-white text-lg overflow-y-hidden rounded pt-2 pb-2">     
-      {props.visible? 
           
           
           <div className="flex">
@@ -96,9 +95,6 @@ function GameListItem(props: GameListItemProps){
 
 
       </div>
-
-      : null
-          }
 
      </div>
 

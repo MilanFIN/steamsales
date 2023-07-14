@@ -20,6 +20,8 @@ import IncludeFreeCheckBox from '@/components/IncludeFreeCheckBox';
 //import IncludeFreeCheckBox from '@components/IncludeFreeCheckBox'
 import GameListItem from '@/components/GameListItem';
 import DualSlider from './DualSlider';
+import SortBy from './SortBy';
+import { selectSortBy } from '@/store/SortBySlice';
 
 
 //const APIURL = "http://localhost:3001/api/"
@@ -35,7 +37,7 @@ interface Game {
   name: string;
   currentPlayers: number;
   peakPlayers: number;
-  priceFormatted: number;
+  priceFormatted: string;
   priceCents: number;
   discount: number;
   visible: boolean;
@@ -55,6 +57,7 @@ export default function ListingPage() {
   const discountState = useTypedSelector(selectDiscount);
   const gameInfoState = useTypedSelector(selectGameInfo);
   const includeFreeState = useTypedSelector(selectIncludeFree);
+  const includeSortByState = useTypedSelector(selectSortBy);
 
 
   useEffect(()=>{
@@ -66,8 +69,10 @@ export default function ListingPage() {
         const response = await fetch(APIURL+"?subdomain=api&lang=english&currency=1&path=ISteamChartsService/GetGamesByConcurrentPlayers/v1/");
         const jsonData = await response.json();
 
+        const gameList = jsonData.response.ranks;
+
         //TODO: temporary restriction to prevent flooding spamming servers accidentally
-        const gameList = jsonData.response.ranks.slice(0, 50)
+        //const gameList = jsonData.response.ranks.slice(0, 50)
 
         gameList.forEach(async (game:any) => { //
 
@@ -78,7 +83,7 @@ export default function ListingPage() {
             viewRank: game.rank,
             currentPlayers: game.concurrent_in_game,
             peakPlayers: game.peak_in_game,
-            priceFormatted:0,
+            priceFormatted:"0",
             priceCents:0,
             discount:0,
             visible:true,
@@ -122,12 +127,14 @@ export default function ListingPage() {
             if (!gameObj.is_free) {
 
               if (gameObj.price_overview == null) {
-                console.log(gameObj)
+                newGame.priceFormatted = "Price not available through api";
+              }
+              else {
+                newGame.priceFormatted = gameObj.price_overview.final_formatted
+                newGame.priceCents =gameObj.price_overview.final
+                newGame.discount = gameObj.price_overview.discount_percent;
               }
 
-              newGame.priceFormatted = gameObj.price_overview.final_formatted
-              newGame.priceCents =gameObj.price_overview.final
-              newGame.discount = gameObj.price_overview.discount_percent;
             }
           }
           catch (err) { }
@@ -149,16 +156,33 @@ export default function ListingPage() {
 
 
   useEffect(() => {
-    setVisibilities(priceLimitState.minPrice, priceLimitState.maxPrice, discountState.minDiscount, discountState.maxDiscount, includeFreeState.include)    
-  }, [priceLimitState.maxPrice, priceLimitState.minPrice, discountState.minDiscount, discountState.maxDiscount, includeFreeState.include]);
+    setVisibilities(priceLimitState.minPrice, priceLimitState.maxPrice,
+                     discountState.minDiscount, discountState.maxDiscount,
+                     includeFreeState.include, includeSortByState.property)    
+  }, [priceLimitState.maxPrice, priceLimitState.minPrice, 
+      discountState.minDiscount, discountState.maxDiscount, 
+      includeFreeState.include,
+      includeSortByState.property]);
 
+  const sortHelper = (a:Game, b:Game, sortProperty:string) => {
+    if (sortProperty == "priceAsc") {
+      return a.priceCents - b.priceCents;
+    }
+    else if (sortProperty == "priceDesc") {
+      return b.priceCents - a.priceCents;
+    }
+    else {
+      return b.currentPlayers - a.currentPlayers;
+    }
+  }
 
-  const setVisibilities = (minPrice:number, maxPrice:number, minDiscount:number, maxDiscount:number, includeFree:boolean) => {
+  const setVisibilities = (minPrice:number, maxPrice:number, minDiscount:number,
+                           maxDiscount:number, includeFree:boolean, sortProperty:string) => {
     console.log(minPrice)
     var rankedObjs = new Array<Game>();
     var rank = 1;
-    //console.log(gamePrices)
-    games.slice().sort((a, b) => b.currentPlayers - a.currentPlayers).forEach((obj, ind) => {
+    console.log("UPDATE")
+    games.slice().sort((a, b) => sortHelper(a, b, sortProperty)).forEach((obj, ind) => {
 
 
       if ((obj.discount >= minDiscount-1 || minDiscount === 0)
@@ -184,11 +208,6 @@ export default function ListingPage() {
     
   }
 
-const onchange = (min:number, max:number) => {
-  console.log(min, max)
-}
-
-
   return (
 
 	<div className="w-full">
@@ -209,9 +228,8 @@ const onchange = (min:number, max:number) => {
                         
                         md:w-[350px]
                         bg-gray-400                 
-                        text-white
-                        bg-gradient-to-b                      
-                        from-gray-800 to-gray-800 
+                        text-gray-100
+                        bg-gray-700
                           `} 
 
                         >
@@ -221,7 +239,7 @@ const onchange = (min:number, max:number) => {
               <DiscountFilter/>
               Include free games
               <IncludeFreeCheckBox/>
-
+              <SortBy/>
 
             </div>
 
@@ -231,10 +249,13 @@ const onchange = (min:number, max:number) => {
               <ul >
               {games.sort((a, b) => a.viewRank - b.viewRank).map((item) => (
                 
+                item.visible ? 
                 <GameListItem key={item.id} id={item.id} rank={item.rank} viewRank={item.viewRank} currentPlayers={item.currentPlayers}
                   peakPlayers={item.peakPlayers} 
                   visible={item.visible} name={item.name} price={item.priceFormatted.toString()} discount={item.discount}
                   platforms={item.platforms} description={item.description} genres={item.genres}/>
+                
+                : null 
                 ))}
               </ul>
             </div>

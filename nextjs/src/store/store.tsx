@@ -5,6 +5,7 @@ import maxPriceReducer from "./priceLimitSlice";
 import discountReducer from "./discountSlice";
 import gameInfoReducer from "./gameInfoSlice";
 import includeFreeReducer from "./includeFreeSlice";
+import sortByReducer from "./SortBySlice"
 
 // use 'configreStrore'  function to create the store
 export const store = configureStore({
@@ -13,7 +14,7 @@ export const store = configureStore({
       discount: discountReducer,
       gameInfo: gameInfoReducer,
       includeFree: includeFreeReducer,
-
+      sortBy: sortByReducer,
     }
   });
   
