@@ -17,10 +17,10 @@ function SortBy(props: SortByProps){
   const options = ["playercount", "date", "name", "priceAsc", "priceDesc"];
   const optionLabels: Record<string, string> = {
     playercount: "Player Count",
-    date: "Date",
+    date: "Release date",
     name: "Name",
-    priceAsc: "Price asc",
-    priceDesc: "Price desc",
+    priceAsc: "Price \u2191",
+    priceDesc: "Price \u2193",
   };
     const [activeSort, setActiveSort] = useState<string>("playercount");
 
@@ -33,10 +33,9 @@ function SortBy(props: SortByProps){
 
   
   const handleBlur = () => {
-    
     setTimeout(() => {
       setIsOpen(false);
-    }, 100);
+    }, 200);
     
   };
   

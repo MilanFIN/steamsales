@@ -43,7 +43,8 @@ interface Game {
   visible: boolean;
   platforms: Array<string>;
   description: string;
-  genres: Array<[number, string]>
+  genres: Array<[number, string]>;
+  releaseDate: number;
 }
 
 export default function ListingPage() {
@@ -63,7 +64,6 @@ export default function ListingPage() {
   useEffect(()=>{
     // do stuff here...
 
-    
     const fetchData = async () => {
       try {
         const response = await fetch(APIURL+"?subdomain=api&lang=english&currency=1&path=ISteamChartsService/GetGamesByConcurrentPlayers/v1/");
@@ -86,16 +86,16 @@ export default function ListingPage() {
             priceFormatted:"0",
             priceCents:0,
             discount:0,
-            visible:true,
+            visible:false,
             platforms:[],
             description: "",
             genres:[],
+            releaseDate: 0,
           };
 
 
           try {
             const url = STOREURL + "?subdomain=store&lang=english&currency=1&path=api/appdetails?appids="+game.appid;
-            console.log(url)
             const gameSpecResponse = await fetch(url);
             const gameJson = await gameSpecResponse.json();
     
@@ -107,7 +107,6 @@ export default function ListingPage() {
              gameObj.genres .forEach((genreList: any) => {
               let genre: [number, string];
               genre = [parseInt(genreList.id), genreList.description];
-              console.log(typeof(genre))
               newGame.genres.push(genre)
             })
 
@@ -121,13 +120,15 @@ export default function ListingPage() {
             });
     
             newGame.platforms = gamePlatforms;
+
+            newGame.releaseDate = Date.parse(gameObj.release_date.date);
     
     
 
             if (!gameObj.is_free) {
 
               if (gameObj.price_overview == null) {
-                newGame.priceFormatted = "Price not available through api";
+                newGame.priceFormatted = "Price data missing";
               }
               else {
                 newGame.priceFormatted = gameObj.price_overview.final_formatted
@@ -138,7 +139,8 @@ export default function ListingPage() {
             }
           }
           catch (err) { }
-            setGames(games => [...games,newGame])
+          newGame.visible=true;
+          setGames(games => [...games,newGame])
   
         })
 
@@ -171,6 +173,12 @@ export default function ListingPage() {
     else if (sortProperty == "priceDesc") {
       return b.priceCents - a.priceCents;
     }
+    else if (sortProperty == "name") {
+      return a.name.localeCompare(b.name)
+    }
+    else if (sortProperty == "date") {
+      return b.releaseDate - a.releaseDate;
+    }
     else {
       return b.currentPlayers - a.currentPlayers;
     }
@@ -181,13 +189,12 @@ export default function ListingPage() {
     console.log(minPrice)
     var rankedObjs = new Array<Game>();
     var rank = 1;
-    console.log("UPDATE")
     games.slice().sort((a, b) => sortHelper(a, b, sortProperty)).forEach((obj, ind) => {
 
 
       if ((obj.discount >= minDiscount-1 || minDiscount === 0)
          && ((obj.discount <= maxDiscount +1 || maxDiscount === 0))
-         && (obj.priceCents <= maxPrice * 100 || maxPrice === 0)
+         && (obj.priceCents <= maxPrice * 100 || maxPrice === 0 || maxPrice === 80)
          && (obj.priceCents >= minPrice * 100 || minPrice === 0)
          && ((includeFree || obj.priceCents !== 0))) {
         obj.visible = true;
@@ -213,7 +220,7 @@ export default function ListingPage() {
 	<div className="w-full">
 
         <div className="text-xl flex justify-center w-full ">
-          <h1 className="justify-center">STEAM TOP 100 SALES</h1>
+          <h1 className="justify-center text-8xl text-gray-100 m-10">STEAM TOP 100</h1>
         </div>
 
 
@@ -224,15 +231,12 @@ export default function ListingPage() {
                         ml-auto mr-auto
                         md:ml-0
                         md:mr-0
-
-                        
                         md:w-[350px]
                         bg-gray-400                 
                         text-gray-100
                         bg-gray-700
-                          `} 
-
-                        >
+                        pt-8
+                          `}>
               Price Between
               <PriceFilter />
               Discount between (%)
@@ -246,18 +250,28 @@ export default function ListingPage() {
             <div className={`md:w-4/6
                              w-full
                              bg-gray-700`}>
-              <ul >
-              {games.sort((a, b) => a.viewRank - b.viewRank).map((item) => (
-                
-                item.visible ? 
-                <GameListItem key={item.id} id={item.id} rank={item.rank} viewRank={item.viewRank} currentPlayers={item.currentPlayers}
-                  peakPlayers={item.peakPlayers} 
-                  visible={item.visible} name={item.name} price={item.priceFormatted.toString()} discount={item.discount}
-                  platforms={item.platforms} description={item.description} genres={item.genres}/>
-                
-                : null 
-                ))}
-              </ul>
+              {games.length != 0 ? 
+                            <ul>
+                            {games.sort((a, b) => a.viewRank - b.viewRank).map((item) => (
+                              
+                              item.visible && item.name.length != 0 ? 
+                              <GameListItem key={item.id} id={item.id} rank={item.rank} viewRank={item.viewRank} currentPlayers={item.currentPlayers}
+                                peakPlayers={item.peakPlayers} 
+                                visible={item.visible} name={item.name} price={item.priceFormatted.toString()} discount={item.discount}
+                                platforms={item.platforms} description={item.description} genres={item.genres}
+                                releaseDate={item.releaseDate}/>
+                              
+                              : null 
+                              ))}
+                            </ul>
+              
+              : 
+                <div className="text-gray-100  flex w-full h-full justify-center items-center flex-row">
+                  <p className="animate-spin origin-[55%_52%] text-4xl">{"\u21BB"}</p>
+                  <p className="ml-4">Fetching games</p>
+
+                  
+                </div>}
             </div>
         </div>
 

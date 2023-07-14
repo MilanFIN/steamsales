@@ -141,13 +141,13 @@ function DualSlider(props: DualSliderProps){
       <div className="relative w-[300px]">
         <div className={ `absolute w-[300px] mt-[-3px] 
                           h-[5px]
-                          bg-gray-100
+                          bg-gray-600
                           `}
                 onClick={() => {
                 }}
         ></div>
 
-        <div ref={range} className={`absolute h-[5px] w-[300px] bg-gray-600 z-10 mt-[-3px] rounded`}
+        <div ref={range} className={`absolute h-[5px] w-[300px] bg-gray-100 z-10 mt-[-3px] rounded`}
                 onClick={() => {
                 }}
         ></div>
@@ -159,7 +159,7 @@ function DualSlider(props: DualSliderProps){
         <input className={`text-white text-center bg-gray-500 
                            text-sm mt-[20px] w-[48px] h-[32px] right-[-16px] 
                            absolute rounded`} 
-                value={maxVal} onChange={updateMaxVal}/>
+                value={maxVal == props.max ? "\u221E" : maxVal} onChange={updateMaxVal}/>
 
 
 

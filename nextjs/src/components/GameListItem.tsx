@@ -21,7 +21,8 @@ interface GameListItemProps {
   discount:number;
   platforms:Array<string>;
   description:string;
-  genres: Array<[number, string]>
+  genres: Array<[number, string]>;
+  releaseDate:number;
 
 }
 
@@ -70,7 +71,10 @@ function GameListItem(props: GameListItemProps){
                       : null
                 }
 
-                </div>
+              </div>
+              <div className="">
+                Released: {(new Date(props.releaseDate)).toLocaleDateString()}
+              </div>
 
               <div className="flex overflow-x-scroll">
                   {props.platforms.map(platform => (
