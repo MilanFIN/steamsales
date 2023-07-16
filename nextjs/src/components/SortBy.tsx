@@ -67,26 +67,30 @@ function SortBy(props: SortByProps){
 
 
   return (
-    <div className="flex items-center text-gray-100">
+    <div className="flex items-center text-gray-100 mt-4 ml-3">
       
       Sort by 
 
       <div className="relative" ref={dropdownRef}>
         <button
-          className="bg-gray-800 hover:bg-gray-600 text-gray-300 hover:text-gray-200 py-2 px-4 rounded-md w-[200px] text-left
-          justify-between flex"
+          className=" 
+                    bg-gradient-to-r from-gray-700 to-gray-700
+                    hover:bg-gray-600 text-gray-300 
+                      hover:text-gray-200 ml-2 px-2 rounded-md w-[200px] text-left
+                      justify-between flex   text-sm
+                      h-6"
           onClick={handleButtonClick}
           onBlur={handleBlur}
         >              
-                <span>{optionLabels[activeSort]}</span>
-                <span>{'\u23F7'}</span> 
+                <span className="my-auto">{optionLabels[activeSort]}</span>
+                <span className="my-auto">{'\u23F7'}</span> 
               </button>
               {isOpen && (
-                <ul className="absolute mt-[-0px] bg-gray-800 text-gray-200  shadow-md mt-2 py-1 w-[200px]">
+                <ul className="absolute mt-[-0px] bg-gray-800 text-gray-200  shadow-md mt-2 py-1 w-[200px] ml-2">
                   {options.map((option) => (
                     <li
                       key={option}
-                      className={`hover:bg-gray-600 px-4 py-2 ${
+                      className={`h-6 hover:bg-gray-600 px-2 my-auto ${
                         activeSort === option ? "bg-gray-600" : ""
                       }`}
                       onClick={() => handleSortSelect(option)}
@@ -104,13 +108,5 @@ function SortBy(props: SortByProps){
 
 export default SortBy;
 /*
-	  <select className="w-[200px] h-[48x] p-2.5 text-gray-900 bg-gray-400 border rounded-md shadow-sm outline-none appearance-none focus:border-indigo-600"
-	  					onChange={changeSort}>
-			  	<option value="count" selected><div className="bg-gray-900">Player count</div></option>
-				<option value="date">Release date</option>
-                <option value="name">Name</option>
-                <option value="priceLow">Lowest price</option>
-                <option value="priceHigh">Highest price</option>
-            </select>
 
 */

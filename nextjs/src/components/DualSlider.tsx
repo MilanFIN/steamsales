@@ -147,7 +147,7 @@ function DualSlider(props: DualSliderProps){
                 }}
         ></div>
 
-        <div ref={range} className={`absolute h-[5px] w-[300px] bg-gray-100 z-10 mt-[-3px] rounded`}
+        <div ref={range} className={`absolute h-[5px] w-[300px] bg-gray-300 z-10 mt-[-3px] rounded`}
                 onClick={() => {
                 }}
         ></div>

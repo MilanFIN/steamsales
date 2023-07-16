@@ -215,12 +215,16 @@ export default function ListingPage() {
     
   }
 
+  const hasGamesToDisplay = () => {
+    return games.some((game) => game.visible);
+  }
+
   return (
 
-	<div className="w-full">
+	<div className="w-full bg-gradient-to-b from-gray-800 to-gray-900">
 
         <div className="text-xl flex justify-center w-full ">
-          <h1 className="justify-center text-8xl text-gray-100 m-10">STEAM TOP 100</h1>
+          <h1 className="justify-center text-8xl text-gray-100 m-10 text-center">STEAM TOP 100</h1>
         </div>
 
 
@@ -229,21 +233,31 @@ export default function ListingPage() {
         <div className={`top-24 right-32   
                         w-[350px]
                         ml-auto mr-auto
-                        md:ml-0
-                        md:mr-0
-                        md:w-[350px]
-                        bg-gray-400                 
+                        md:mx-2
+                        md:mr-2
+                        md:w-[356px]
                         text-gray-100
-                        bg-gray-700
-                        pt-8
+                        bg-transparent
+                        border-4
+                        border-gray-600
+                        mt-8
+                        h-96
+                        
                           `}>
-              Price Between
-              <PriceFilter />
-              Discount between (%)
-              <DiscountFilter/>
-              Include free games
-              <IncludeFreeCheckBox/>
-              <SortBy/>
+              <h2 className="text-center bg-gray-600 mb-4">Filters</h2>
+              <div className="">
+                <span className="ml-2">
+                  Price Between
+                </span>
+                <PriceFilter />
+                <span className="ml-2">
+                Discount between (%)
+                </span>
+                <DiscountFilter/>
+                <IncludeFreeCheckBox/>
+                Include free games
+                <SortBy/>
+              </div>
 
             </div>
 
@@ -251,6 +265,9 @@ export default function ListingPage() {
                              w-full
                              bg-gray-700`}>
               {games.length != 0 ? 
+                        <div className="w-full h-full">
+                          { hasGamesToDisplay() ? 
+
                             <ul>
                             {games.sort((a, b) => a.viewRank - b.viewRank).map((item) => (
                               
@@ -264,6 +281,14 @@ export default function ListingPage() {
                               : null 
                               ))}
                             </ul>
+                            :
+                            
+                            <div className="text-gray-100  flex w-full h-full justify-center items-center flex-row">
+                              <p className="ml-4 ">No results</p>
+                            </div>
+          
+                          }
+                          </div>
               
               : 
                 <div className="text-gray-100  flex w-full h-full justify-center items-center flex-row">
