@@ -166,6 +166,12 @@ export default function ListingPage() {
       includeFreeState.include,
       includeSortByState.property]);
 
+  useEffect(() => {
+    setVisibilities(priceLimitState.minPrice, priceLimitState.maxPrice,
+      discountState.minDiscount, discountState.maxDiscount,
+      includeFreeState.include, includeSortByState.property);
+  }, [games])
+
   const sortHelper = (a:Game, b:Game, sortProperty:string) => {
     if (sortProperty == "priceAsc") {
       return a.priceCents - b.priceCents;
@@ -179,6 +185,9 @@ export default function ListingPage() {
     else if (sortProperty == "date") {
       return b.releaseDate - a.releaseDate;
     }
+    else if (sortProperty == "discount") {
+      return b.discount - a.discount;
+    }
     else {
       return b.currentPlayers - a.currentPlayers;
     }
@@ -186,7 +195,6 @@ export default function ListingPage() {
 
   const setVisibilities = (minPrice:number, maxPrice:number, minDiscount:number,
                            maxDiscount:number, includeFree:boolean, sortProperty:string) => {
-    console.log(minPrice)
     var rankedObjs = new Array<Game>();
     var rank = 1;
     games.slice().sort((a, b) => sortHelper(a, b, sortProperty)).forEach((obj, ind) => {

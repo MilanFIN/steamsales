@@ -3,8 +3,6 @@
 
 import React, { ChangeEvent, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useDispatch } from "react-redux";
-import { updateMaxPrice } from '../store/priceLimitSlice';
-import classnames from "classnames";
 
 
 

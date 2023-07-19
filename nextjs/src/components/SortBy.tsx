@@ -14,13 +14,14 @@ interface SortByProps {
 function SortBy(props: SortByProps){
   const dispatch = useDispatch();
 
-  const options = ["playercount", "date", "name", "priceAsc", "priceDesc"];
+  const options = ["playercount", "date", "name", "priceAsc", "priceDesc", "discount"];
   const optionLabels: Record<string, string> = {
     playercount: "Player Count",
     date: "Release date",
     name: "Name",
     priceAsc: "Price \u2191",
     priceDesc: "Price \u2193",
+    discount: "Discount %",
   };
     const [activeSort, setActiveSort] = useState<string>("playercount");
 

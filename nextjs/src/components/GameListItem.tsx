@@ -84,7 +84,7 @@ function GameListItem(props: GameListItemProps){
                     ))
                   }
                   {props.genres.slice(0,5).map(genre => (
-                    <div>
+                    <div key={genre[0]}>
                     {genre[1].length < 15 ? 
                       <div className="bg-gray-500 rounded-lg ml-1 mr-1 pl-2 pr-2"><a href={"https://store.steampowered.com/tags/en/"+genre[1]}>{genre[1]}</a></div>
                     : null}

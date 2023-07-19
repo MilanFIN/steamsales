@@ -9,7 +9,6 @@ const APIURL = ".steampowered.com/"
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
 
-	//var result = cache.get("req.query")
 
 	
 	if ("path" in req.query && "subdomain" in req.query
@@ -26,15 +25,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 		if (subdomain === "store") {
 			url+="&currency="+currency+"&l="+lang;
 		}
-		console.log(url)
 
 		const value = cacheData.get(url);
 		if (value) {
-			
 			res.status(200).json(value);
-			console.log("found")
 		} else {
-			console.log("REQUEST")
 			const hours = 1;
 			const response = await fetch(url);
 			const data = await response.json();
