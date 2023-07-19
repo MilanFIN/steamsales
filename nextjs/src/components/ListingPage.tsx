@@ -166,11 +166,13 @@ export default function ListingPage() {
       includeFreeState.include,
       includeSortByState.property]);
 
+      /*
   useEffect(() => {
     setVisibilities(priceLimitState.minPrice, priceLimitState.maxPrice,
       discountState.minDiscount, discountState.maxDiscount,
       includeFreeState.include, includeSortByState.property);
   }, [games])
+  */
 
   const sortHelper = (a:Game, b:Game, sortProperty:string) => {
     if (sortProperty == "priceAsc") {
