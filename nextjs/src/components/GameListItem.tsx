@@ -1,6 +1,7 @@
 
 
-import React, { useEffect, useState } from 'react';
+import { updateGameDetail } from '@/store/gameDetailSlice';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from "react-redux";
 
 
@@ -23,28 +24,42 @@ interface GameListItemProps {
   description:string;
   genres: Array<[number, string]>;
   releaseDate:number;
-
+  active:boolean;
 }
 
 function GameListItem(props: GameListItemProps){
 
-  const [name, setName] = useState<string>("");
-  const [free, setFree] = useState(false);
-  const [price, setPrice] = useState<string>("");
-  const [priceCents, setPriceCents] = useState<number>(0);
-  const [discount, setDiscount] = useState<number>(0);
-  const [platforms, setPlatforms] = useState<Array<string>>([]);
-  const [visible, setVisible] = useState(true);
+  const focusRef = useRef<HTMLDivElement>(null);
 
   const dispatch = useDispatch();
 
 
+  const openDetails = () => {
+    dispatch(
+      updateGameDetail({open:true, id:props.id})
+    );
+  }
+
+  useEffect(() => {
+    if (props.active) {
+      if (focusRef.current != null) {
+        focusRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [props.active]);
+
   return (
-    <div className="bg-gray-600 m-2 text-white text-lg overflow-y-hidden rounded pt-2 pb-2">     
+    <div className="bg-gray-600 m-2 text-white text-lg overflow-y-hidden
+                   rounded pt-2 pb-2 cursor-pointer" 
+                   onClick={openDetails} ref={focusRef}
+                   >     
           
           
-          <div className="flex">
-            <h1 className="ml-4 w-8 top-4 relative font-bold">{props.viewRank}</h1>
+          <div className="flex grow">
+            <h1 className="ml-4 w-8 top-4 relative font-bold"
+              >
+              {props.viewRank}
+            </h1>
 
           <div className="md:flex md:flex-row">
 
@@ -53,7 +68,7 @@ function GameListItem(props: GameListItemProps){
                 src={"https://cdn.cloudflare.steamstatic.com/steam/apps/"+props.id+"/capsule_231x87.jpg"} alt={"game: "+props.name+" thumbnail"} />
             </a>
 
-            <div className="ml-4">
+            <div className="ml-4 ">
                 {props.name}
                 <br/>
                 Players online:  
@@ -93,6 +108,12 @@ function GameListItem(props: GameListItemProps){
                   ))
                   }
               </div>
+              {props.active ? 
+                <div>
+                  <p dangerouslySetInnerHTML={{__html: props.description}}>
+                  </p>
+                </div>
+              : null}
           </div>
           
           </div>

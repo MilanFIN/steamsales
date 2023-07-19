@@ -12,7 +12,7 @@ import { selectDiscount } from '../store/discountSlice';
 import { selectIncludeFree } from '../store/includeFreeSlice';
 
 import { RootState } from '../store/store';
-import { selectGameInfo } from '../store/gameInfoSlice';
+import { selectGameDetail } from '../store/gameDetailSlice';
 import PriceFilter from '@/components/PriceFilter';
 import DiscountFilter from '@/components/DiscountFilter';
 import IncludeFreeCheckBox from '@/components/IncludeFreeCheckBox';
@@ -56,7 +56,7 @@ export default function ListingPage() {
 
   const priceLimitState = useTypedSelector(selectPriceLimits);
   const discountState = useTypedSelector(selectDiscount);
-  const gameInfoState = useTypedSelector(selectGameInfo);
+  const gameDetailState = useTypedSelector(selectGameDetail);
   const includeFreeState = useTypedSelector(selectIncludeFree);
   const includeSortByState = useTypedSelector(selectSortBy);
 
@@ -102,7 +102,7 @@ export default function ListingPage() {
             var [gameObj]:any  = Object.values(gameJson);
             gameObj = gameObj.data;
             newGame.name = gameObj.name
-            newGame.description = gameObj.short_description;
+            newGame.description = gameObj.detailed_description; //about_the_game //short_description
 
              gameObj.genres .forEach((genreList: any) => {
               let genre: [number, string];
@@ -286,7 +286,9 @@ export default function ListingPage() {
                                 peakPlayers={item.peakPlayers} 
                                 visible={item.visible} name={item.name} price={item.priceFormatted.toString()} discount={item.discount}
                                 platforms={item.platforms} description={item.description} genres={item.genres}
-                                releaseDate={item.releaseDate}/>
+                                releaseDate={item.releaseDate}
+                                active={gameDetailState.open && gameDetailState.id == item.id ? true: false}
+                                />
                               
                               : null 
                               ))}

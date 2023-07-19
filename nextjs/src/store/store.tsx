@@ -3,7 +3,7 @@ import { createWrapper } from "next-redux-wrapper";
 
 import maxPriceReducer from "./priceLimitSlice";
 import discountReducer from "./discountSlice";
-import gameInfoReducer from "./gameInfoSlice";
+import gameDetailReducer from "./gameDetailSlice";
 import includeFreeReducer from "./includeFreeSlice";
 import sortByReducer from "./SortBySlice"
 
@@ -12,7 +12,7 @@ export const store = configureStore({
     reducer: {
       priceLimits: maxPriceReducer,
       discount: discountReducer,
-      gameInfo: gameInfoReducer,
+      gameDetail: gameDetailReducer,
       includeFree: includeFreeReducer,
       sortBy: sortByReducer,
     }
