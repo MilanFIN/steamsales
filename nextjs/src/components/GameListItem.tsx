@@ -61,7 +61,7 @@ function GameListItem(props: GameListItemProps){
               {props.viewRank}
             </h1>
 
-          <div className="md:flex md:flex-row">
+          <div className="lg:flex lg:flex-row">
 
             <a className="flex-shrink-0 mt-2" href={"https://store.steampowered.com/app/"+props.id}>
               <img className="w-[72] h-auto"

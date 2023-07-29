@@ -238,14 +238,14 @@ export default function ListingPage() {
         </div>
 
 
-        <div className="md:flex justify-center flex-row-reverse flex-column">
+        <div className="lg:flex justify-center flex-row-reverse flex-column">
 
         <div className={`top-24 right-32   
                         w-[350px]
                         ml-auto mr-auto
-                        md:mx-2
-                        md:mr-2
-                        md:w-[356px]
+                        lg:mx-2
+                        lg:mr-2
+                        lg:w-[356px]
                         text-gray-100
                         bg-transparent
                         border-4
@@ -271,7 +271,7 @@ export default function ListingPage() {
 
             </div>
 
-            <div className={`md:w-4/6
+            <div className={`lg:w-4/6
                              w-full
                              bg-gray-700`}>
               {games.length != 0 ? 
