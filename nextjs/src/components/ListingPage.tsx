@@ -233,12 +233,9 @@ export default function ListingPage() {
 
 	<div className="w-full bg-gradient-to-b from-gray-800 to-gray-900">
 
-        <div className="text-xl flex justify-center w-full ">
-          <h1 className="justify-center text-8xl text-gray-100 m-10 text-center">STEAM TOP 100</h1>
-        </div>
 
 
-        <div className="lg:flex justify-center flex-row-reverse flex-column">
+        <div className="pt-8 lg:flex justify-center flex-row-reverse flex-column">
 
         <div className={`top-24 right-32   
                         w-[350px]
