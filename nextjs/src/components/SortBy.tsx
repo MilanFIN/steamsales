@@ -1,20 +1,20 @@
-
-
-import { updateSortBy } from '@/store/SortBySlice';
-import React, { RefObject, useEffect, useRef, useState } from 'react';
+import { updateSortBy } from "@/store/SortBySlice";
+import React, { RefObject, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 
+interface SortByProps {}
 
-
-
-interface SortByProps {
-
-}
-
-function SortBy(props: SortByProps){
+function SortBy(props: SortByProps) {
   const dispatch = useDispatch();
 
-  const options = ["playercount", "date", "name", "priceAsc", "priceDesc", "discount"];
+  const options = [
+    "playercount",
+    "date",
+    "name",
+    "priceAsc",
+    "priceDesc",
+    "discount",
+  ];
   const optionLabels: Record<string, string> = {
     playercount: "Player Count",
     date: "Release date",
@@ -23,7 +23,7 @@ function SortBy(props: SortByProps){
     priceDesc: "Price \u2193",
     discount: "Discount %",
   };
-    const [activeSort, setActiveSort] = useState<string>("playercount");
+  const [activeSort, setActiveSort] = useState<string>("playercount");
 
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef: RefObject<HTMLDivElement> = useRef(null);
@@ -32,14 +32,12 @@ function SortBy(props: SortByProps){
     setIsOpen(!isOpen);
   };
 
-  
   const handleBlur = () => {
     setTimeout(() => {
       setIsOpen(false);
     }, 200);
-    
   };
-  
+
   /*
   useEffect(() => {
     const handleClickOutside = (event:any) => {
@@ -59,19 +57,14 @@ function SortBy(props: SortByProps){
 */
   const handleSortSelect = (sortOption: string) => {
     setActiveSort(sortOption);
-    dispatch(
-      updateSortBy(sortOption)
-    );
+    dispatch(updateSortBy(sortOption));
 
     setIsOpen(false);
   };
 
-
   return (
     <div className="flex items-center text-gray-100 mt-4 ml-3">
-      
-      Sort by 
-
+      Sort by
       <div className="relative" ref={dropdownRef}>
         <button
           className=" 
@@ -82,29 +75,28 @@ function SortBy(props: SortByProps){
                       h-6"
           onClick={handleButtonClick}
           onBlur={handleBlur}
-        >              
-                <span className="my-auto">{optionLabels[activeSort]}</span>
-                <span className="my-auto">{'\u23F7'}</span> 
-              </button>
-              {isOpen && (
-                <ul className="absolute mt-[-0px] bg-gray-800 text-gray-200  shadow-md mt-2 py-1 w-[200px] ml-2">
-                  {options.map((option) => (
-                    <li
-                      key={option}
-                      className={`h-6 hover:bg-gray-600 px-2 my-auto ${
-                        activeSort === option ? "bg-gray-600" : ""
-                      }`}
-                      onClick={() => handleSortSelect(option)}
-                    >
-                      {optionLabels[option]} 
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
+        >
+          <span className="my-auto">{optionLabels[activeSort]}</span>
+          <span className="my-auto">{"\u23F7"}</span>
+        </button>
+        {isOpen && (
+          <ul className="absolute mt-[-0px] bg-gray-800 text-gray-200  shadow-md mt-2 py-1 w-[200px] ml-2">
+            {options.map((option) => (
+              <li
+                key={option}
+                className={`h-6 hover:bg-gray-600 px-2 my-auto ${
+                  activeSort === option ? "bg-gray-600" : ""
+                }`}
+                onClick={() => handleSortSelect(option)}
+              >
+                {optionLabels[option]}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
-
-  )
+  );
 }
 
 export default SortBy;
