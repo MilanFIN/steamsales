@@ -9,7 +9,7 @@ import { ReactElement } from "react";
 const Home = () => {
   return (
     <div className="">
-      <a href="/top100"> homepage </a>
+      <p > About page will go here </p>
     </div>
   );
 };
