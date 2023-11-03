@@ -19,11 +19,15 @@ const STOREURL = "/api/steamapi/"; //"/api/steamstore/"
 
 const Top100 = () => {
   const [games, setGames] = useState<Game[]>([]);
+  const [loaded, setLoaded] = useState<boolean>(false);
 
   useEffect(() => {
-    // do stuff here...
-
     const fetchData = async () => {
+      console.log(loaded)
+      if (loaded) {
+        return;
+      }
+
       try {
         const response = await fetch(
           APIURL +
@@ -103,6 +107,7 @@ const Top100 = () => {
           newGame.visible = true;
           setGames((games) => [...games, newGame]);
         });
+        setLoaded(true);
       } catch (error) {
         console.error("Error:", error);
       }
