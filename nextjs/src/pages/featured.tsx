@@ -1,4 +1,4 @@
-"use_client";
+"use_server";
 import "../app/globals.css";
 
 import { Inter } from "next/font/google";
@@ -14,20 +14,88 @@ import { Game } from "@/interfaces/interfaces";
 const inter = Inter({ subsets: ["latin"] });
 
 //const APIURL = "http://localhost:3001/api/"
-const APIURL = "/api/steamapi/";
-const STOREURL = "/api/steamapi/"; //"/api/steamstore/"
+const FEATUREDURL = "/api/featured/";
+
+
+
 
 const Featured = () => {
   const [games, setGames] = useState<Game[]>([]);
-  const [loaded, setLoaded] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(loaded)
-      if (loaded) {
-        return;
-      }
 
+
+      const response = await fetch(
+        FEATUREDURL
+      );
+
+      const featuredJson = await response.json();
+
+      const platforms = ["featured_linux", "featured_win", "featured_mac"];
+
+      let gameList:Game[] = [];
+
+      platforms.forEach(platform => {
+        const content = featuredJson[platform];
+        console.log(content)
+        content.forEach((element: { id: any; name: any; discount_percent: any; final_price: any; }) => {
+          
+          let  newGame: Game = {
+            id: element.id,
+            name: element.name,
+            discount: element.discount_percent,
+            priceCents: element.final_price,
+            platforms: ["win"],
+            //following are missing currently
+            description: "",
+            viewRank: 0,
+            rank: 0,
+            currentPlayers: 0,
+            peakPlayers: 0,
+            priceFormatted: "",
+            visible: true,
+            genres: [],
+            releaseDate: 0
+          }
+          
+          let duplicate = false;
+
+          gameList.forEach(game => {
+            if (game.id == element.id) {
+              duplicate = true;
+            }
+          })
+          if (!duplicate) {
+            gameList.push(
+              newGame
+            );
+          }
+          
+        });
+      })
+
+      setGames(gameList);
+
+      /*
+            name: "",
+            id: game.appid,
+            rank: game.rank,
+            viewRank: game.rank,
+            currentPlayers: game.concurrent_in_game,
+            peakPlayers: game.peak_in_game,
+            priceFormatted: "0",
+            priceCents: 0,
+            discount: 0,
+            visible: false,
+            platforms: [],
+            description: "",
+            genres: [],
+            releaseDate: 0,
+
+      */
+    
+      /*
       try {
         let gameList = [{
           appid: 949230,
@@ -36,7 +104,7 @@ const Featured = () => {
           rank: 29
         }]
 
-        
+
         gameList.forEach(async (game: any) => {
           //
 
@@ -108,6 +176,8 @@ const Featured = () => {
       } catch (error) {
         console.error("Error:", error);
       }
+          */
+
     };
 
     fetchData();
