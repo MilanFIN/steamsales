@@ -71,9 +71,14 @@ function GameListItem(props: GameListItemProps) {
           <div className="ml-4 ">
             {props.name}
             <br />
-            Players online:
-            {" " + numberWithSpaces(props.currentPlayers)}
-            <br />
+            {props.currentPlayers >= 0 ?
+              <span>Players online:
+              {" " + numberWithSpaces(props.currentPlayers)}
+              <br />
+              </span>
+              :null
+            
+            }
             <div className="flex">
               {props.price == "0" ? (
                 <span>Free</span>

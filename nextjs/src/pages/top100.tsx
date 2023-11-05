@@ -9,7 +9,7 @@ import { Provider } from "react-redux";
 import ListingPage from "@/components/ListingPage";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { Game } from "@/interfaces/interfaces";
+import { Game } from "@/common/interfaces";
 
 const inter = Inter({ subsets: ["latin"] });
 

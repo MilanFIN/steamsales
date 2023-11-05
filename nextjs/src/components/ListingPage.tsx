@@ -21,7 +21,7 @@ import GameListItem from "@/components/GameListItem";
 import DualSlider from "./DualSlider";
 import SortBy from "./SortBy";
 import { selectSortBy } from "@/store/SortBySlice";
-import { Game } from "@/interfaces/interfaces";
+import { Game } from "@/common/interfaces";
 
 //const APIURL = "http://localhost:3001/api/"
 const APIURL = "/api/steamapi/";

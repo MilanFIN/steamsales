@@ -9,12 +9,14 @@ import { Provider } from "react-redux";
 import ListingPage from "@/components/ListingPage";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { Game } from "@/interfaces/interfaces";
+import { Game } from "@/common/interfaces";
+import { getGame } from "@/common/apigetters";
 
-const inter = Inter({ subsets: ["latin"] });
 
 //const APIURL = "http://localhost:3001/api/"
 const FEATUREDURL = "/api/featured/";
+const STOREURL = "/api/steamapi/";
+
 
 const Featured = () => {
   const [games, setGames] = useState<Game[]>([]);
@@ -24,7 +26,89 @@ const Featured = () => {
       const response = await fetch(FEATUREDURL);
 
       const featuredJson = await response.json();
-      console.log(featuredJson)
+      let rank = 0;
+
+      let gameIds: number[] = [];
+
+      Object.keys(featuredJson).forEach((category:string) => {
+        let isnum = /^\d+$/.test(category);
+        if (!isnum) {
+          if (featuredJson[category].hasOwnProperty("items")) {
+            featuredJson[category].items.forEach( (game: any) => {
+              //console.log(game)
+              gameIds.push(game.id);
+            })
+  
+          }
+        }
+      })
+
+      gameIds.forEach(async (id:number, rank) => {
+        let newGame: Game = {
+          name: "",
+          id: id,
+          rank: rank+1,
+          viewRank: rank+1,
+          currentPlayers: -1,
+          peakPlayers: -1,
+          priceFormatted: "0",
+          priceCents: 0,
+          discount: 0,
+          visible: true,
+          platforms: [],
+          description: "",
+          genres: [],
+          releaseDate: 0,
+        };
+        newGame = await getGame(newGame)
+
+        let duplicate = false;
+        games.forEach(game => {
+          if (game.id == id) {
+            duplicate = true;
+          }
+        })
+        if (!duplicate) {
+          setGames((games) => [...games, newGame]);
+
+        }
+
+      });
+
+
+
+/*
+
+
+              let newGame: Game = {
+                name: "",
+                id: game.id,
+                rank: rank,
+                viewRank: rank,
+                currentPlayers: 0,
+                peakPlayers: 0,
+                priceFormatted: "0",
+                priceCents: 0,
+                discount: 0,
+                visible: false,
+                platforms: [],
+                description: "",
+                genres: [],
+                releaseDate: 0,
+              };
+
+              newGame = await getGame(newGame);
+    
+              //console.log(newGame)
+              rank++
+              setGames((games) => [...games, newGame]);
+              console.log([...games, newGame])
+
+*/
+
+
+      //setGames(gameList);
+
       /*
       const platforms = ["featured_linux", "featured_win", "featured_mac"];
 
