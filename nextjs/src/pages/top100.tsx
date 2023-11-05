@@ -23,7 +23,7 @@ const Top100 = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(loaded)
+      console.log(loaded);
       if (loaded) {
         return;
       }

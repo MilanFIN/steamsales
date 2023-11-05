@@ -16,66 +16,66 @@ const inter = Inter({ subsets: ["latin"] });
 //const APIURL = "http://localhost:3001/api/"
 const FEATUREDURL = "/api/featured/";
 
-
-
-
 const Featured = () => {
   const [games, setGames] = useState<Game[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
-
-
-      const response = await fetch(
-        FEATUREDURL
-      );
+      const response = await fetch(FEATUREDURL);
 
       const featuredJson = await response.json();
-
+      console.log(featuredJson)
+      /*
       const platforms = ["featured_linux", "featured_win", "featured_mac"];
 
-      let gameList:Game[] = [];
+      let gameList: Game[] = [];
 
-      platforms.forEach(platform => {
+      let rank = 0;
+      platforms.forEach((platform) => {
         const content = featuredJson[platform];
-        console.log(content)
-        content.forEach((element: { id: any; name: any; discount_percent: any; final_price: any; }) => {
-          
-          let  newGame: Game = {
-            id: element.id,
-            name: element.name,
-            discount: element.discount_percent,
-            priceCents: element.final_price,
-            platforms: ["win"],
-            //following are missing currently
-            description: "",
-            viewRank: 0,
-            rank: 0,
-            currentPlayers: 0,
-            peakPlayers: 0,
-            priceFormatted: "",
-            visible: true,
-            genres: [],
-            releaseDate: 0
-          }
-          
-          let duplicate = false;
+        console.log(content);
+        content.forEach(
+          (element: {
+            id: any;
+            name: any;
+            discount_percent: any;
+            final_price: any;
+          }) => {
+            let newGame: Game = {
+              id: element.id,
+              name: element.name,
+              discount: element.discount_percent,
+              priceCents: element.final_price,
+              platforms: ["win"],
+              //following are missing currently
+              description: "",
+              viewRank: rank,
+              rank: rank,
+              currentPlayers: 0,
+              peakPlayers: 0,
+              priceFormatted: (element.final_price / 100).toString(),
+              visible: true,
+              genres: [],
+              releaseDate: 0,
+            };
 
-          gameList.forEach(game => {
-            if (game.id == element.id) {
-              duplicate = true;
+            let duplicate = false;
+
+            gameList.forEach((game) => {
+              if (game.id == element.id) {
+                duplicate = true;
+              }
+            });
+            if (!duplicate) {
+              gameList.push(newGame);
+              rank++;
             }
-          })
-          if (!duplicate) {
-            gameList.push(
-              newGame
-            );
           }
-          
-        });
-      })
+        );
+      });
 
       setGames(gameList);
+      */
 
       /*
             name: "",
@@ -94,7 +94,7 @@ const Featured = () => {
             releaseDate: 0,
 
       */
-    
+
       /*
       try {
         let gameList = [{
@@ -177,7 +177,6 @@ const Featured = () => {
         console.error("Error:", error);
       }
           */
-
     };
 
     fetchData();

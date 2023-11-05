@@ -51,7 +51,6 @@ function GameListItem(props: GameListItemProps) {
       ref={focusRef}
     >
       <div className="flex grow">
-        <h1 className="ml-4 w-8 top-4 relative font-bold">{props.viewRank}</h1>
 
         <div className="lg:flex lg:flex-row">
           <a
@@ -59,7 +58,7 @@ function GameListItem(props: GameListItemProps) {
             href={"https://store.steampowered.com/app/" + props.id}
           >
             <img
-              className="w-[72] h-auto"
+              className="ml-4 w-[72] h-auto"
               src={
                 "https://cdn.cloudflare.steamstatic.com/steam/apps/" +
                 props.id +
