@@ -119,7 +119,7 @@ const Top100 = () => {
   return (
     <Provider store={store}>
       <div className="">
-        <ListingPage games={games} />
+        <ListingPage games={games} enablePlayerCountFilter={true} />
       </div>
     </Provider>
   );

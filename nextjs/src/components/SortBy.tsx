@@ -2,19 +2,19 @@ import { updateSortBy } from "@/store/SortBySlice";
 import React, { RefObject, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 
-interface SortByProps {}
+interface SortByProps {
+  filterByPlayerCount: boolean;
+}
 
 function SortBy(props: SortByProps) {
   const dispatch = useDispatch();
 
-  const options = [
-    "playercount",
-    "date",
-    "name",
-    "priceAsc",
-    "priceDesc",
-    "discount",
-  ];
+  let options = ["discount", "date", "name", "priceAsc", "priceDesc"];
+
+  if (props.filterByPlayerCount) {
+    options.unshift("playercount");
+  }
+
   const optionLabels: Record<string, string> = {
     playercount: "Player Count",
     date: "Release date",
@@ -23,7 +23,9 @@ function SortBy(props: SortByProps) {
     priceDesc: "Price \u2193",
     discount: "Discount %",
   };
-  const [activeSort, setActiveSort] = useState<string>("playercount");
+  const [activeSort, setActiveSort] = useState<string>(
+    props.filterByPlayerCount ? "playercount" : "discount"
+  );
 
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef: RefObject<HTMLDivElement> = useRef(null);
@@ -38,23 +40,6 @@ function SortBy(props: SortByProps) {
     }, 200);
   };
 
-  /*
-  useEffect(() => {
-    const handleClickOutside = (event:any) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setTimeout(() => {
-          setIsOpen(false);
-        }, 100);
-      }
-    };
-    
-    document.addEventListener('click', handleClickOutside);
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
-    
-  }, []);
-*/
   const handleSortSelect = (sortOption: string) => {
     setActiveSort(sortOption);
     dispatch(updateSortBy(sortOption));

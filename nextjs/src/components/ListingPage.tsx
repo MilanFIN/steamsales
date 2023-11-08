@@ -29,6 +29,7 @@ const STOREURL = "/api/steamapi/"; //"/api/steamstore/"
 
 interface ListingPageProps {
   games: Game[];
+  enablePlayerCountFilter: boolean;
 }
 
 export default function ListingPage(props: ListingPageProps) {
@@ -152,7 +153,7 @@ export default function ListingPage(props: ListingPageProps) {
             <DiscountFilter />
             <IncludeFreeCheckBox />
             Include free games
-            <SortBy />
+            <SortBy filterByPlayerCount={props.enablePlayerCountFilter} />
           </div>
         </div>
 
