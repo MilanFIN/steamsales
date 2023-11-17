@@ -1,6 +1,6 @@
-"use client";
+"use_client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSelector, useDispatch, TypedUseSelectorHook } from "react-redux";
 
 import { store } from "../store/store";
@@ -27,6 +27,19 @@ import { Game } from "@/common/interfaces";
 const APIURL = "/api/steamapi/";
 const STOREURL = "/api/steamapi/"; //"/api/steamstore/"
 
+
+export const useAddEventListener = () => {
+  const addEventListener = useCallback((
+        target: HTMLElement | Window,
+        eventKey: string,
+        event: (e: Event) => void
+    ) => {
+        target.addEventListener(eventKey, event);
+        return () => target.removeEventListener(eventKey, event);
+    }, []);
+  return { addEventListener };
+};
+
 interface ListingPageProps {
   games: Game[];
   enablePlayerCountFilter: boolean;
@@ -42,6 +55,8 @@ export default function ListingPage(props: ListingPageProps) {
   const gameDetailState = useTypedSelector(selectGameDetail);
   const includeFreeState = useTypedSelector(selectIncludeFree);
   const includeSortByState = useTypedSelector(selectSortBy);
+
+  const [width, setWidth] = useState(0);
 
   useEffect(() => {
     setVisibilities(
@@ -60,6 +75,7 @@ export default function ListingPage(props: ListingPageProps) {
     includeFreeState.include,
     includeSortByState.property,
   ]);
+
 
   /*
   useEffect(() => {
@@ -126,41 +142,62 @@ export default function ListingPage(props: ListingPageProps) {
     return props.games.some((game) => game.visible);
   };
 
+  const { addEventListener } = useAddEventListener();
+
+  useEffect(() => {
+    setWidth(window.innerWidth);
+
+    addEventListener(window, 'resize', (e:any) => { 
+      setWidth(window.innerWidth);
+  })
+
+  });
+
   return (
     <div>
       <div className="pt-8 lg:flex justify-center flex-row-reverse flex-column">
         <div
-          className={`top-24 right-32   
-                        w-[350px]
+          className={`top-16 right-4   
                         ml-auto mr-auto
                         lg:mx-2
                         lg:mr-2
-                        lg:w-[356px]
                         text-gray-100
                         bg-transparent
-                        border-4
-                        border-gray-600
                         mt-8
-                        h-96
+                        h-auto
+                        lg:h-96
                         
-                          `}
-        >
-          <h2 className="text-center bg-gray-600 mb-4">Filters</h2>
-          <div className="">
-            <span className="ml-2">Price Between</span>
+                        ${width >= 1024 ? "fixed w-[356px]": "static w-4/6"}
+                        `}>
+          <h2 className="text-center mb-4">Filters</h2>
+          <div className={`${width < 1024 ? "flex flex-wrap justify-evenly": "static"}`}>
+            <div className="">
+            <span className="ml-8 ">Price Between</span>
             <PriceFilter />
-            <span className="ml-2">Discount between (%)</span>
+
+            </div>
+            <div>
+            <span className="ml-8">Discount between (%)</span>
             <DiscountFilter />
-            <IncludeFreeCheckBox />
-            Include free games
+
+            </div>
+            <div>
+              <IncludeFreeCheckBox />
+              Include free games
+            </div>
+            <div>
             <SortBy filterByPlayerCount={props.enablePlayerCountFilter} />
+
+            </div>
           </div>
         </div>
 
         <div
           className={`lg:w-4/6
-                             w-full
-                             bg-gray-700`}
+                             w-auto
+                             bg-gray-700
+                             ${width >= 1024 ? "mr-[400px]": "mr-0"}
+                             `}
         >
           {props.games.length != 0 ? (
             <div className="w-full h-full">

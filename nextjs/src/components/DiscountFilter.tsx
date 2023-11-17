@@ -13,7 +13,7 @@ function DiscountFilter(props: DiscountFilterProps) {
   };
 
   return (
-    <div>
+    <div className={"mt-2"}>
       <DualSlider min={0} max={100} onChange={discountChange} />
     </div>
   );

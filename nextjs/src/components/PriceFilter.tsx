@@ -16,7 +16,7 @@ function PriceFilter(props: PriceFilterProps) {
   };
 
   return (
-    <div>
+    <div className="mt-2">
       <DualSlider min={0} max={80} onChange={priceChange} />
     </div>
   );
