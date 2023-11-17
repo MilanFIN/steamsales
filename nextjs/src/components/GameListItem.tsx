@@ -95,7 +95,7 @@ function GameListItem(props: GameListItemProps) {
             <div className="">
               Released: {new Date(props.releaseDate).toLocaleDateString()}
             </div>
-            <div className="flex overflow-x-scroll">
+            <div className="flex overflow-x-hidden">
               {props.platforms.map((platform) => (
                 //https://store.cloudflare.steamstatic.com/public/images/v6/icon_platform_win.png?v=3
                 //`https://store.cloudflare.steamstatic.com/public/images/v6/icon_platform_${platform}_dark.png`}

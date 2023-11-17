@@ -22,7 +22,7 @@ function IncludeFreeCheckBox(props: IncludeFreeCheckBoxProps) {
       type="checkbox"
       checked={include}
       onChange={onChangeInclude}
-      className="ml-3 mr-2 mt-4"
+      className="ml-3 mr-2 mt-5"
     />
   );
 }

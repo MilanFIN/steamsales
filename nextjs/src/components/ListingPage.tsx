@@ -171,15 +171,17 @@ export default function ListingPage(props: ListingPageProps) {
                         `}>
           <h2 className="text-center mb-4">Filters</h2>
           <div className={`${width < 1024 ? "flex flex-wrap justify-evenly": "static"}`}>
-            <div className="">
+          <div className={`${width < 1024 ? "flex flex-wrap justify-evenly": "static"}`}>
+            <div className="mx-2">
             <span className="ml-8 ">Price Between</span>
             <PriceFilter />
 
             </div>
-            <div>
+            <div className="mx-2 mt-2">
             <span className="ml-8">Discount between (%)</span>
             <DiscountFilter />
 
+            </div>
             </div>
             <div>
               <IncludeFreeCheckBox />
