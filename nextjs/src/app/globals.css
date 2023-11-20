@@ -54,27 +54,22 @@ body {
 }
 
 .thumb::-webkit-slider-thumb {
-  /*
   background-color: #f1f5f7;
-    border-radius: 50%;
-
-  */
+  border-radius: 50%;
   border: none;
   box-shadow: 0 0 1px 1px #ced4da;
   cursor: pointer;
   height: 18px;
   width: 18px;
-  margin-top: 4px;
+  margin-top: 0px;
   pointer-events: all;
   position: relative;
 }
 
 .thumb::-moz-range-thumb {
-  /*
   background-color: #f1f5f7;
-    border-radius: 50%;
+  border-radius: 50%;
 
-  */
   border: none;
   box-shadow: 0 0 1px 1px #ced4da;
   cursor: pointer;
