@@ -9,7 +9,9 @@ export const getTop100 = async () => {
         "https://api.steampowered.com/ISteamChartsService/GetGamesByConcurrentPlayers/v1/";
 
     const response = await fetch(url, {
-        cache: "force-cache",
+		next: {
+			revalidate: 3600
+		}
     });
     const data = await response.json();
     const ranks = data.response.ranks;
@@ -22,7 +24,9 @@ export const getAppDetails = async (id: string) => {
         id +
         "&currency=1&l=english";
     const response = await fetch(url, {
-        cache: "force-cache",
+		next: {
+			revalidate: 3600
+		}
     });
     const data = await response.json();
     return data[Object.keys(data)[0]].data;
@@ -31,7 +35,9 @@ export const getAppDetails = async (id: string) => {
 export const getFeatured = async () => {
     const url = "https://store.steampowered.com/api/featuredcategories/";
     const response = await fetch(url, {
-        cache: "force-cache",
+		next: {
+			revalidate: 3600
+		}
     });
     const data = await response.json();
     return data;
