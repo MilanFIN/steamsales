@@ -13,7 +13,7 @@ export const getTop100 = async () => {
 		return value
 	} else {
 		const response = await fetch(url, {
-			cache: "no-cache"
+			cache: "default"
 		});
 		const data = await response.json();
 		const ranks = data.response.ranks;
@@ -30,7 +30,7 @@ export const getAppDetails = async (id: string) => {
 		return value
 	} else {
 		const response = await fetch(url, {
-			cache: "no-cache"
+			cache: "default"
 		});
 		const data = await response.json();
 		cacheData.put(url, data, hours * 1000 * 60 * 60);
@@ -47,7 +47,7 @@ export const getFeatured = async () => {
 		return value
 	} else {
 		const response = await fetch(url, {
-			cache: "no-cache"
+			cache: "default"
 		});
 		const data = await response.json();
 		cacheData.put(url, data, hours * 1000 * 60 * 60);
