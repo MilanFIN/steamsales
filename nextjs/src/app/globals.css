@@ -3,107 +3,107 @@
 @tailwind utilities;
 
 body {
-  background-color: rgb(17 24 39);
+    background-color: rgb(17 24 39);
 }
 
 .slider__left-value {
-  color: white;
-  background-color: #999999;
-  font-size: 12px;
-  margin-top: 20px;
-  width: 48px;
-  height: 32px;
-  text-align: center;
+    color: white;
+    background-color: #999999;
+    font-size: 12px;
+    margin-top: 20px;
+    width: 48px;
+    height: 32px;
+    text-align: center;
 }
 
 .slider__left-value {
-  left: -16px;
+    left: -16px;
 }
 
 .slider__right-value {
-  right: -16px;
+    right: -16px;
 }
 
 /* Removing the default appearance */
 .thumb,
 .thumb::-webkit-slider-thumb {
-  /*
+    /*
   -webkit-appearance: none;
   -webkit-tap-highlight-color: transparent;
   */
 }
 
 .thumb {
-  pointer-events: none;
-  position: absolute;
-  height: 0;
-  width: 300px;
-  outline: none;
+    pointer-events: none;
+    position: absolute;
+    height: 0;
+    width: 300px;
+    outline: none;
 }
 
 .thumb--zindex-3 {
-  z-index: 30;
+    z-index: 30;
 }
 
 .thumb--zindex-4 {
-  z-index: 40;
+    z-index: 40;
 }
 
 .thumb--zindex-5 {
-  z-index: 50;
+    z-index: 50;
 }
 
 .thumb::-webkit-slider-thumb {
-  background-color: #f1f5f7;
-  border-radius: 50%;
-  border: none;
-  box-shadow: 0 0 1px 1px #ced4da;
-  cursor: pointer;
-  height: 18px;
-  width: 18px;
-  margin-top: 0px;
-  pointer-events: all;
-  position: relative;
+    background-color: #f1f5f7;
+    border-radius: 50%;
+    border: none;
+    box-shadow: 0 0 1px 1px #ced4da;
+    cursor: pointer;
+    height: 18px;
+    width: 18px;
+    margin-top: 0px;
+    pointer-events: all;
+    position: relative;
 }
 
 .thumb::-moz-range-thumb {
-  background-color: #f1f5f7;
-  border-radius: 50%;
+    background-color: #f1f5f7;
+    border-radius: 50%;
 
-  border: none;
-  box-shadow: 0 0 1px 1px #ced4da;
-  cursor: pointer;
-  height: 18px;
-  width: 18px;
-  margin-top: 4px;
-  pointer-events: all;
-  position: relative;
+    border: none;
+    box-shadow: 0 0 1px 1px #ced4da;
+    cursor: pointer;
+    height: 18px;
+    width: 18px;
+    margin-top: 4px;
+    pointer-events: all;
+    position: relative;
 }
 
 input[type="checkbox"] {
-  position: relative;
-  cursor: pointer;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  width: 16px;
-  height: 16px;
-  background-color: transparent;
-  outline: 2px #e5e7eb solid;
-  border-radius: 2px;
+    position: relative;
+    cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background-color: transparent;
+    outline: 2px #e5e7eb solid;
+    border-radius: 2px;
 }
 input[type="checkbox"]:checked {
-  background-color: #374151;
-  border: 1px solid #374151;
-  color: #e5e7eb;
+    background-color: #374151;
+    border: 1px solid #374151;
+    color: #e5e7eb;
 }
 input[type="checkbox"]:checked:after {
-  content: "\2714";
-  font-size: 14px;
-  position: absolute;
-  top: -3px;
-  left: 2px;
-  color: #e5e7eb;
+    content: "\2714";
+    font-size: 14px;
+    position: absolute;
+    top: -3px;
+    left: 2px;
+    color: #e5e7eb;
 }
 
 /*

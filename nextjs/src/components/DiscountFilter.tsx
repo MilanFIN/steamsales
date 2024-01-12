@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { updateDiscountLimits } from "../store/discountSlice";
 import DualSlider from "./DualSlider";
 
-interface DiscountFilterProps {}
+interface DiscountFilterProps {
+    updateMin: (min: number) => void;
+    updateMax: (max: number) => void;
+}
 
 function DiscountFilter(props: DiscountFilterProps) {
-  const dispatch = useDispatch();
+    const discountChange = (min: number, max: number) => {
+        props.updateMin(min);
+        props.updateMax(max);
+    };
 
-  const discountChange = (min: number, max: number) => {
-    dispatch(updateDiscountLimits({ maxDiscount: max, minDiscount: min }));
-  };
-
-  return (
-    <div className={"mt-2"}>
-      <DualSlider min={0} max={100} onChange={discountChange} />
-    </div>
-  );
+    return (
+        <div className={"mt-2"}>
+            <DualSlider min={0} max={100} onChange={discountChange} />
+        </div>
+    );
 }
 
 export default DiscountFilter;
