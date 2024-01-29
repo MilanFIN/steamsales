@@ -10,11 +10,12 @@ import { parseGameDetails } from "@/common/utils";
 
 export const dynamic = 'force-dynamic'
 
+
 const getGames = async () => {
     const top100 = await getTop100();
 
     let games = new Array<Game>();
-    for (let game of top100) {
+    for (let game of top100.slice(0, 5)) {
         //.forEach(async (game: any, index: number) => {
         let newGame: Game = {
             name: "",
@@ -46,7 +47,7 @@ const Top100 = async () => {
 
     return (
         <div className="">
-            <Suspense fallback={"test"}>
+            <Suspense fallback={null}>
                 <ListingPage games={games} enablePlayerCountFilter={true} />
             </Suspense>
         </div>

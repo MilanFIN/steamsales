@@ -63,7 +63,7 @@ const Featured = async () => {
 
     return (
         <div className="">
-            <Suspense fallback={"test"}>
+            <Suspense fallback={null}>
                 <ListingPage games={games} enablePlayerCountFilter={false} />
             </Suspense>
         </div>
