@@ -2,7 +2,6 @@ import { Game } from "./interfaces";
 
 export const parseGameDetails = (newGame:Game, gameObj:any) => {
 
-
 	newGame.name = gameObj.name;
 	newGame.description = gameObj.detailed_description;
 
