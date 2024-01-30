@@ -48,9 +48,11 @@ const getGames = async () => {
             rank++;
 
             try {
-                let gameObj = await getAppDetails(id.toString());
-                newGame = await parseGameDetails(newGame, gameObj);
-                games.push(newGame);
+                if (!games.some((game) => (game.id == id))) {
+                    let gameObj = await getAppDetails(id.toString());
+                    newGame = await parseGameDetails(newGame, gameObj);
+                    games.push(newGame);
+                }
             } catch (e) {}
         }
     }

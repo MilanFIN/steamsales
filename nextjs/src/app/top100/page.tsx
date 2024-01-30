@@ -15,7 +15,7 @@ const getGames = async () => {
     const top100 = await getTop100();
 
     let games = new Array<Game>();
-    for (let game of top100.slice(0, 5)) {
+    for (let game of top100) {
         //.forEach(async (game: any, index: number) => {
         let newGame: Game = {
             name: "",
