@@ -69,7 +69,7 @@ function GameListItem(props: GameListItemProps) {
                     <div className="ml-4 ">
                         {props.name}
                         <br />
-                        {props.currentPlayers >= 0 ? (
+                        {props.currentPlayers > 0 ? (
                             <span>
                                 Players online:
                                 {" " + numberWithSpaces(props.currentPlayers)}

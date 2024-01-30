@@ -57,6 +57,8 @@ const getGames = async () => {
         }
     }
 
+    games.sort((a, b) => b.discount - a.discount);
+
     return games;
 };
 
