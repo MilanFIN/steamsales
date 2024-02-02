@@ -8,8 +8,7 @@ import { getAppDetails, getTop100 } from "@/app/actions";
 import ListingPage from "@/components/ListingPage";
 import { parseGameDetails } from "@/common/utils";
 
-export const dynamic = 'force-dynamic'
-
+export const dynamic = "force-dynamic";
 
 const getGames = async () => {
     const top100 = await getTop100();
@@ -33,10 +32,14 @@ const getGames = async () => {
             genres: [],
             releaseDate: 0,
         };
-        
-        let gameObj = await getAppDetails(game.appid);
-        newGame = await parseGameDetails(newGame, gameObj);
-        games.push(newGame);
+
+        try {
+            if (!games.some((g) => g.id == game.appid)) {
+                let gameObj = await getAppDetails(game.appid);
+                newGame = await parseGameDetails(newGame, gameObj);
+                games.push(newGame);
+            }
+        } catch (e) {}
     }
 
     return games;
