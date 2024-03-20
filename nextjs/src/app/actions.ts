@@ -20,7 +20,7 @@ export const getTop100 = async () => {
 
 export const getAppDetails = async (id: string) => {
     let url =
-        "https://store.steampowered.com/api/appdetails?appids="+id
+        "https://store.steampowered.com/api/appdetails?appids="+id+"&currency=1&lang=english"
     const response = await fetch(url, {
         next: {
             revalidate: 3600,
@@ -35,7 +35,7 @@ export const getAppsDetails = async (ids: string[]) => {
     for (let i = 0; i < ids.length; i++) {
         let url =
             "https://store.steampowered.com/api/appdetails?appids=" +
-            ids[i]
+            ids[i]+"&currency=1&lang=english"
         const response = await fetch(url, {
             next: {
                 revalidate: 3600,
