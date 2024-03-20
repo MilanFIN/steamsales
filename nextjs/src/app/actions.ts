@@ -9,9 +9,9 @@ export const getTop100 = async () => {
         "https://api.steampowered.com/ISteamChartsService/GetGamesByConcurrentPlayers/v1/";
 
     const response = await fetch(url, {
-		next: {
-			revalidate: 3600
-		}
+        next: {
+            revalidate: 3600,
+        },
     });
     const data = await response.json();
     const ranks = data.response.ranks;
@@ -20,24 +20,40 @@ export const getTop100 = async () => {
 
 export const getAppDetails = async (id: string) => {
     let url =
-        "https://store.steampowered.com/api/appdetails?appids=" +
-        id +
-        "&currency=1&l=english";
+        "https://store.steampowered.com/api/appdetails?appids="+id
     const response = await fetch(url, {
-		next: {
-			revalidate: 3600
-		}
+        next: {
+            revalidate: 3600,
+        },
     });
     const data = await response.json();
     return data[Object.keys(data)[0]].data;
 };
 
+export const getAppsDetails = async (ids: string[]) => {
+    let results = [];
+    for (let i = 0; i < ids.length; i++) {
+        let url =
+            "https://store.steampowered.com/api/appdetails?appids=" +
+            ids[i]
+        const response = await fetch(url, {
+            next: {
+                revalidate: 3600,
+            },
+        });
+        const data = await response.json();
+        const res = data[Object.keys(data)[0]].data;
+        results.push(res)
+    }
+    return results;
+};
+
 export const getFeatured = async () => {
     const url = "https://store.steampowered.com/api/featuredcategories/";
     const response = await fetch(url, {
-		next: {
-			revalidate: 3600
-		}
+        next: {
+            revalidate: 3600,
+        },
     });
     const data = await response.json();
     return data;
